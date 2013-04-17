@@ -381,6 +381,8 @@ function rotary_register_required_plugins() {
 	 * end of each line for what each argument will be.
 	 */
 	$config = array(
+		'parent_menu_slug'  => 'plugins.php',         // Default parent menu slug
+        'parent_url_slug'   => 'plugins.php',
 		'strings'      		=> array(
 		),
 	);
