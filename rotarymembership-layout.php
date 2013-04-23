@@ -33,34 +33,36 @@
 					<div class="profilepicturebottom"></div>
 					<h4>Birthday</h4>
 					<p class="birthday"></p>
+					<h4>Anniversary</h4>
+					<p class="anniversarydate"></p>	
 					<h4>Member Since</h4>
 					<p class="membersince"></p>
 				</div>
 				<div class="memberdetailsarea">
 					<div class="company">
-						<h3>Company Info</h3>
-						<div class="alignleft">
-							<h4>Bus Postion</h4>
-							<p class="jobtitle"></p>
-						</div>
-						<div class="alignleft larger">	
-							<h4>Bus Name</h4>
+						<h3>Company</h3>
+						<div class="clearleft">	
+							<h4>Name</h4>
 							<p class="busname"></p>
 						</div>
 						<div class="clearleft">
-							<h4>Bus Web</h4>	
+							<h4>Title</h4>
+							<p class="jobtitle"></p>
+						</div>
+						<div class="clearleft">
+							<h4>Web</h4>	
 							<p class="busweb"></p>
 						</div>	
 					</div>
 					<div class="contact">
 						<h3>Contact</h3>
-						<div class="alignleft">
+						<div class="clearleft">
 							<h4>Cell</h4>
 							<p class="cellphone"></p>
 							<h4>Home</h4>
 							<p class="homephone"></p>
 						</div>
-						<div class="alignleft larger">
+						<div class="clearleft larger">
 							<h4>Office</h4>
 							<p class="officephone"></p>
 							<h4>Email</h4>
@@ -69,13 +71,9 @@
 					</div>
 					<div class="partner">
 						<h3>Partner</h3>
-						<div class="alignleft">
+						<div class="clearleft">
 							<h4>Spouse</h4>
 							<p class="partnername"></p>
-						</div>	
-						<div class="alignleft">
-							<h4>Anniversary</h4>
-							<p class="anniversarydate"></p>
 						</div>	
 					</div>
 					

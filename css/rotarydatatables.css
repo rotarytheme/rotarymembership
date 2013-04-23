@@ -92,16 +92,16 @@
 	float:left;
 	margin-left:30px;
 	padding-top:20px;
-	width: 170px;
+	width: 160px;
 }
 #rotarymemberdialog .memberdetailsarea {
 	float:left;
-	margin-left:30px;
+	margin-left:20px;
 	margin-right:20px;
 	overflow:hidden;
 	padding-bottom:30px;
 	padding-top:20px;
-	width: 340px;
+	width: 350px;
 }
 #rotarymemberdialog .company, #rotarymemberdialog .contact {
 	border-bottom-width:1px;
@@ -130,8 +130,16 @@
 #rotarymemberdialog h4 {
 	font-size:12px;
 }
+#rotarymemberdialog .memberdetailsarea h4 {
+	float:left;
+	margin-left:25px;
+	width:70px;
+}
 #rotarymemberdialog .clearleft {
 	clear:left;
+}
+#rotarymemberdialog .addressdetails {
+	line-height:1.1em;
 }
 #rotarymembers td.username {
 	cursor:pointer;

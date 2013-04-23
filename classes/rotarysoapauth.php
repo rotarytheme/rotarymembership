@@ -27,6 +27,9 @@ class RotarySoapAuth extends RotaryAuth{
 		//add_action('wp_authenticate', array($this, 'auth_check_login'), 1, 2);
 		
 		add_filter( 'authenticate', array($this, 'auth_check_login'), 10, 3 );
+		add_filter( 'show_password_fields', array( $this, 'disable' ) );
+    	add_filter( 'allow_password_reset', array( $this, 'disable' ) );
+    	add_filter( 'gettext', array( $this, 'remove' ) );
 		//add_filter( 'authenticate', array($this, 'rotary_email_login_authenticate'), 20, 3 );
 		//add_filter('show_password_fields', array($this, 'soap_show_password_fields')); 
 	}
@@ -265,5 +268,20 @@ class RotarySoapAuth extends RotaryAuth{
 		if ( $user )
 			$username = $user->user_login;
 		return wp_authenticate_username_password( null, $username, $password );
-	} 
+	}
+	function disable() {
+    	if ( is_admin() ) {
+      		$userdata = wp_get_current_user();
+      		$user = new WP_User($userdata->ID);
+      		if ( !empty( $user->roles ) && is_array( $user->roles ) && $user->roles[0] == 'administrator' ) {
+        		return true;
+			}
+    	}
+    	return false;
+  	}
+
+  	function remove($text) 
+  	{
+    	return str_replace( array('Lost your password?', 'Lost your password'), '', trim($text, '?') ); 
+  	}
 }

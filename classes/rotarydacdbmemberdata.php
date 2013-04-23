@@ -286,7 +286,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		  	$this->updateMemberData();
 			//members are updated first so that they are in place to add to committees
 			$this->updateCommitteeData();
-		 	set_transient('dacdb', 'dacdb', 60*60*24); 
+		 	set_transient('dacdb', 'dacdb', 60*60*24*7); 
 
 	 	}
 	}
