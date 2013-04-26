@@ -77,13 +77,13 @@
 #rotarymemberdialog .namearea {
 	float:left;
 	height:115px;
-	width: 170px;
+	width: 200px;
 }
 #rotarymemberdialog .addressarea {
  	float:left;
-	margin-left:30px;
+	margin-left:95px;
 	height:115px;	
-	width: 330px;
+	width: 240px;
 }
 #rotarymemberdialog .dialogmain {
 	overflow:hidden;
@@ -132,14 +132,19 @@
 }
 #rotarymemberdialog .memberdetailsarea h4 {
 	float:left;
-	margin-left:25px;
+	margin-left:45px;
 	width:70px;
+}
+#rotarymemberdialog .memberdetailsarea p {
+	margin-left:115px;
+	line-height:1.4em;
 }
 #rotarymemberdialog .clearleft {
 	clear:left;
 }
 #rotarymemberdialog .addressdetails {
 	line-height:1.1em;
+	padding-top:10px;
 }
 #rotarymembers td.username {
 	cursor:pointer;

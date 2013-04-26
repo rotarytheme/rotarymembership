@@ -344,8 +344,15 @@ class RotaryProfiles {
 		}
 		$usermeta = get_user_meta($user->ID);
 		$memberName = $usermeta['first_name'][0]. ' ' .$usermeta['last_name'][0];
-		$memberAddress = $usermeta['streetaddress1'][0] . ' ' . $usermeta['streetaddress2'][0] . ' ' . $usermeta['city'][0] . ' ' . $usermeta['state'][0]. ' ' . $usermeta['zip'][0];
-		$memberAddress = $memberAddress;
+		//$memberAddress = $usermeta['streetaddress1'][0] . ' ' . $usermeta['streetaddress2'][0] . ' ' . $usermeta['city'][0] . ' ' . $usermeta['state'][0]. ' ' . $usermeta['zip'][0];
+		$memberAddress = $usermeta['streetaddress1'][0];
+		if ($usermeta['streetaddress2'][0] ) {
+			$memberAddress .= '<br/>'.$usermeta['streetaddress2'][0];
+		}
+		if($usermeta['city'][0]) {
+			$memberAddress .= '<br/>'. $usermeta['city'][0] . ' ' . $usermeta['state'][0]. ' ' . $usermeta['zip'][0];
+		}
+		
 		$output['memberName'] = $memberName;
 		$output['memberAddress'] = $memberAddress;
 		$output['classification'] = ($usermeta['classification'])  ? $usermeta['classification'] : '&nbsp;';
@@ -362,12 +369,12 @@ class RotaryProfiles {
 			$output['email'] = '<a href="mailto:' .antispambot($email, 1) .'">'.$email.'</a>';
 		}
 		$output['partnername'] = ($usermeta['partnername']) ? $usermeta['partnername'] : '&nbsp;';
-		$output['anniversarydate'] = ($usermeta['anniversarydate']) ? $usermeta['anniversarydate'] : '&nbsp;';
+		$output['anniversarydate'] = ($usermeta['anniversarydate'][0]) ? date('F d', strtotime($usermeta['anniversarydate'][0])): '&nbsp;';
 		$output['membersince'] = ($usermeta['membersince']) ? $usermeta['membersince'] : '&nbsp;';
 		$output['profilepicture'] = $usermeta['profilepicture'];
-		$output['birthday'] = ($usermeta['birthday'][0]) ? $usermeta['birthday'] : '&nbsp;';
+		$output['birthday'] = ($usermeta['birthday'][0]) ? date('F d', strtotime($usermeta['birthday'][0])) : '&nbsp;';
 		$output['busweb'] = ($usermeta['busweb']) ? $usermeta['busweb'] : '&nbsp;';
-		$output['membersince'] = ($usermeta['membersince']) ? $usermeta['membersince'] : '&nbsp;';
+		$output['membersince'] = ($usermeta['membersince'][0]) ?  date('F d Y', strtotime($usermeta['membersince'][0])) : '&nbsp;';
 		$options = get_option('rotary_dacdb');
 		if ('yes' == $options['rotary_use_dacdb']) {
 			$output['clubname'] = $usermeta['clubname'];
