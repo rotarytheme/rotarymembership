@@ -132,6 +132,7 @@
 }
 #rotarymemberdialog .memberdetailsarea h4 {
 	float:left;
+	line-height:1.4em;
 	margin-left:45px;
 	width:70px;
 }
