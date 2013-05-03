@@ -63,7 +63,7 @@
 							<p class="homephone"></p>
 						</div>
 						<div class="clearleft larger">
-							<h4>Office</h4>
+							<h4>Business</h4>
 							<p class="officephone"></p>
 							<h4>Email</h4>
 							<p class="email"></p>

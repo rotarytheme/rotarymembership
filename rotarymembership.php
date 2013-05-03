@@ -311,7 +311,7 @@ class RotaryMembership {
 		
 		wp_enqueue_style('rotary-datatables');
 		wp_enqueue_script(array('datatables','datatablesreload', 'rotarydatatables', 'jquery-ui-dialog'));
-		wp_localize_script( 'rotarydatatables', 'rotarydatatables', array('ajaxURL' => get_admin_url().'admin-ajax.php','tableNonce' => wp_create_nonce( 'rotary-table-nonce' )) );
+		wp_localize_script( 'rotarydatatables', 'rotarydatatables', array('ajaxURL' => admin_url('admin-ajax.php'),'tableNonce' => wp_create_nonce( 'rotary-table-nonce' )) );
 	 }
 	 //get the list of members
 	 function rotary_get_members() {

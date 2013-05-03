@@ -359,7 +359,7 @@ class RotaryProfiles {
 		$output['company'] = ($usermeta['company']) ? $usermeta['company'] : '&nbsp;';
 		$output['jobTitle'] = ($usermeta['jobtitle']) ? $usermeta['jobtitle'] : '&nbsp;';
 		$output['homephone'] = ($usermeta['homephone']) ? $usermeta['homephone'] : '&nbsp;';
-		$output['businessphone'] = ($usermeta['businessphone']) ? $usermeta['businessphone'] : '&nbsp;';
+		$output['businessphone'] = ($usermeta['busphone'][0]) ? $usermeta['busphone'] : '&nbsp;';
 		$output['cellphone'] = (trim($usermeta['cellphone'][0])) ? $usermeta['cellphone'] : '&nbsp;';
 		$email = ($usermeta['email']) ? $usermeta['email'][0] : '&nbsp;';
 		if ('&nbsp;' == $email) {
