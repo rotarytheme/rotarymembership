@@ -155,6 +155,15 @@
 	min-height:50px;
 	padding-top:15px;
 }
+#rotarymemberdialog .dialogbottom .rotaractclub {
+	display: none;
+}
+.rotaract #rotarymemberdialog .dialogbottom .rotaractclub {
+	display: block;
+}
+.rotaract #rotarymemberdialog .dialogbottom .rotaryclub {
+	display: none;
+}
 #rotarymembers_length {
 	display:none;
 }

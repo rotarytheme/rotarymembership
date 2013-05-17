@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
 			$('#rotarymemberdialog .birthday').html(memberDetailData.birthday);
 			$('#rotarymemberdialog .busweb').html(memberDetailData.busweb);
 			$('#rotarymemberdialog .membersince').html(memberDetailData.membersince);
-			$('#rotarymemberdialog .dialogbottom').html('<p class="clubname">'+memberDetailData.clubname+'</p><p class="rotaryclub">Rotary Club</p>');
+			$('#rotarymemberdialog .dialogbottom').html('<p class="clubname">'+memberDetailData.clubname+'</p><p class="rotaryclub">Rotary Club</p><p class="rotaractclub">Rotaract Club</p>');
 			$('#rotarymemberdialog .profilepicture img').remove();
 			if ($.trim(memberDetailData.profilepicture)) {
 				$('#rotarymemberdialog .profilepicture').append('<img src="'+ memberDetailData.profilepicture + '" alt="'+memberDetailData.memberName + '" title="' + memberDetailData.memberName + '"/>');
