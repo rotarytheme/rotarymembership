@@ -93,8 +93,8 @@ class RotaryMembership {
 		add_settings_field('rotary_instructions', '', array($this, 'rotary_form_field'), 'general', 'rotary_settings_section', array('fieldName' => 'rotary_instructions'));
 		
 		add_settings_field('rotary_dacdb_district', '<span class="dacdb">Rotary District Number</span>', array($this, 'rotary_form_field'), 'general', 'rotary_settings_section', array('fieldName' => 'rotary_dacdb_district'));
-		add_settings_field('rotary_dacdb_club', '<span class="dacdb">Rotary Club Number</span>', array($this, 'rotary_form_field'), 'general', 'rotary_settings_section', array('fieldName' => 'rotary_dacdb_club'));
-		add_settings_field('rotary_dacdb_club_name', '<span class="nodacdb">Rotary Club Name</span>', array($this, 'rotary_form_field'), 'general', 'rotary_settings_section', array('fieldName' => 'rotary_dacdb_club_name'));
+		add_settings_field('rotary_dacdb_club', '<span class="dacdb">Rotary/Rotaract Club Number</span>', array($this, 'rotary_form_field'), 'general', 'rotary_settings_section', array('fieldName' => 'rotary_dacdb_club'));
+		add_settings_field('rotary_dacdb_club_name', '<span class="nodacdb">Rotary/Rotaract Club Name</span>', array($this, 'rotary_form_field'), 'general', 'rotary_settings_section', array('fieldName' => 'rotary_dacdb_club_name'));
 		//add filter to add a setup link for the plugin on the plugin page
 		add_filter('plugin_action_links_'. ROTARY_MEMBERSHIP_PLUGIN_FILE, array($this, 'rotary_base_plugin_link'), 10, 4);
 	}
