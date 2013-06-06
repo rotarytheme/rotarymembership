@@ -442,7 +442,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
   		$header = new SoapHeader('http://xWeb', 'Token', $token, false );
   		$client->__setSoapHeaders(array($header)); 
 		try {	
-			$rotaryclubmembers = $client->ClubMembers('0,1,5, 148', 'UserName'); 
+			$rotaryclubmembers = $client->ClubMembers('0,1,5,8, 148', 'UserName'); 
 			$rotaryclubmembers = $client->CommitteeMembersByID($committeeNumber, 'UserName');
 		}
 		catch (SoapFault $exception) {
