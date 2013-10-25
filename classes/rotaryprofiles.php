@@ -319,7 +319,7 @@ class RotaryProfiles {
 		}
 		foreach ($users as $user) {
 			$usermeta = get_user_meta($user->ID);
-			if ('' == trim($usermeta['membersince'])) {
+			if ('' == trim($usermeta['membersince'][0])) {
 				continue;
 			}
 			if ($nameorder == 'firstname') {
