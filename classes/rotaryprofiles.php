@@ -319,9 +319,9 @@ class RotaryProfiles {
 		}
 		foreach ($users as $user) {
 			$usermeta = get_user_meta($user->ID);
-			//if ('0' == $usermeta['memberyesno'][0] || '' == $usermeta['memberyesno'][0]) {
-				//continue;
-			//}
+			if ('' == trim($usermeta['membersince'])) {
+				continue;
+			}
 			if ($nameorder == 'firstname') {
 				$memberName = $usermeta['first_name'][0]. ' ' .$usermeta['last_name'][0];
 			}
