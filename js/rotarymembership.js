@@ -2,7 +2,7 @@ jQuery(document).ready(function($) {
 	
 	 var rotaryMemberShip = {
 		 init: function() {
-			$('.datepicker').datepicker();
+			$('.user-edit-php .datepicker').datepicker();
 			var _custom_media = true,
 			_orig_send_attachment = wp.media.editor.send.attachment;
 			$('.uploader .button').on('click', function(e){ 
