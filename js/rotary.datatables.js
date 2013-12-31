@@ -32,6 +32,7 @@ jQuery(document).ready(function($) {
 	});
 		$( document ).on('click', '#rotarymembers td.username', this.showDetails);
 		$('.rotaryselections input[name=nameorder], .rotaryselections #commitees').on('click', this.reloadMembers);
+		$('.rotaryselections #commitees').on('change', this.reloadMembers);
 		},
 		reloadMembers : function(e) {
 			rotaryTable.fnReloadAjax();
