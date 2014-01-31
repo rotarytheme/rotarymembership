@@ -230,7 +230,7 @@ class RotaryProfiles {
 		</tr>
         <!--Member Since-->   
         <tr>
-			<th><label for="membersince">Member Since</label></th>
+			<th><label for="membersince">Member Since <br/><small>(required for member to appear in member directory)</small></label></th>
 
 			<td>
 				<input type="text" name="membersince" id="membersince" class="datepicker" value="<?php echo esc_attr( get_user_meta( $user->ID, 'membersince', true ) ); ?>"   <?php echo $disabled;?>/><br />
@@ -285,8 +285,8 @@ class RotaryProfiles {
 	function get_users_json($nameorder) {
 		$output = array(
         	'sColumns' => 'Name, Classification, Cell/Home Phone, Business Phone, Email',
-			'sEcho' => intval($_GET['sEcho']),
-			'iTotalRecords' => count($rotaryclubmembers->MEMBER),
+        	'sEcho' => isset($_GET['sEcho']) ? intval($_GET['sEcho']) : null,
+			'iTotalRecords' => isset($rotaryclubmembers) ? count($rotaryclubmembers->MEMBER) : 0,
 			'iTotalDisplayRecords' =>10,
 			'aaData' => array()
 		);
@@ -319,7 +319,7 @@ class RotaryProfiles {
 		}
 		foreach ($users as $user) {
 			$usermeta = get_user_meta($user->ID);
-			if ('' == trim($usermeta['membersince'][0])) {
+			if (!isset($usermeta['membersince'][0]) || '' == trim($usermeta['membersince'][0])) {
 				continue;
 			}
 			if ($nameorder == 'firstname') {
