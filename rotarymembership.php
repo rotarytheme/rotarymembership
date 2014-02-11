@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.11
+Version: 2.12
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
@@ -167,6 +167,7 @@ class RotaryMembership {
 		wp_enqueue_script( 'rotarymembership', plugins_url('/js/rotarymembership.js', __FILE__) );
         wp_enqueue_media();
     	wp_enqueue_script( 'jquery-ui-datepicker');
+    	wp_enqueue_script( 'jquery-ui-dialog');
         wp_register_style('rotary-style', plugins_url('/css/rotarymembership.css', __FILE__),false, 0.1);
 		wp_enqueue_style( 'rotary-style' );
 		
