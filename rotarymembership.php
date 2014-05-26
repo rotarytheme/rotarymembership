@@ -2,14 +2,19 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.12
+Version: 2.13
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
 */
+// Set path to theme specific functions
+define( 'ACF_LITE' , true );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_PATH', dirname( __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_FILE', plugin_basename( __FILE__ ) );
+include_once('advanced-custom-fields/acf.php' );
+include_once('acf-repeater/acf-repeater.php');
+include_once($includes_path . 'committee-fields.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotaryprofiles.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarymemberdata.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarydacdbmemberdata.php');
@@ -32,8 +37,6 @@ class RotaryMembership {
 			//$this->rotaryProfiles->getUsers(new RotaryDacdbMemberData($this->rotaryAuth));
 		}
 		add_action('init', array($this, 'register_commitee_post_type'));
-		add_action( 'add_meta_boxes', array($this, 'add_committee_metabox'));
-		add_action( 'save_post', array($this, 'save_committee_metabox'), 10, 2);
 		add_action( 'p2p_init', array($this, 'rotary_connection_types' ));
 		add_shortcode( 'MEMBER_DIRECTORY', array($this, 'get_rotary_club_members') );
 		add_action('init', array($this, 'register_script_for_shortcodes') );
@@ -49,6 +52,7 @@ class RotaryMembership {
 	}
 	//activation creates a table to store rotary members user id from DacDb. 
 	//This will be used to delete users that are no longer Rotary members
+	//the same will be done for committees
 	function activate() {
 		global $wpdb;
    		$table_name = $wpdb->prefix . 'rotarymembers';
@@ -59,7 +63,14 @@ class RotaryMembership {
   		);';
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
   		dbDelta($sql); 
-	}
+  		$table_name = $wpdb->prefix . 'rotarycommittees';
+  		$sql = 'CREATE TABLE ' . $table_name .'(
+     		id int(11) unsigned NOT NULL auto_increment,
+			committeenum int(11),
+     		PRIMARY KEY  (id)
+  		);';
+  		dbDelta($sql); 
+  	}
 	function deactivate() {
 		
 	}
@@ -228,56 +239,12 @@ class RotaryMembership {
             'hierarchical' => false,  
 			'exclude_from_search' => true,
 			'rewrite' => array("slug" => "committees"),
-            'supports' => array('title')  
+            'supports' => array('title', 'comments', 'editor')  
            );  
       
         register_post_type( 'rotary-committees' , $args );  
 		
 	}
-	//add a metabox for the committee number
-	function add_committee_metabox() {
-		add_meta_box( 'committeenumber', __( 'Committee Number' ),  array($this, 'show_committee_metabox'), 'rotary-committees', 'normal', 'high' );
-	}
-	//save the committee number
-	function save_committee_metabox($post_id, $post) {
-	    if ( !isset( $_POST['rotary_commmittee_nonce'] ) || !wp_verify_nonce( $_POST['rotary_commmittee_nonce'], basename( __FILE__ ) ) )
-         return $post_id;
-		 
-		/* Get the post type object. */
-	    $post_type = get_post_type_object( $post->post_type );
-	 
-	    /* Check if the current user has permission to edit the post. */
-	    if ( !current_user_can( $post_type->cap->edit_post, $post_id ) ) {
-	        return $post_id;	
-		}
-		if (!isset($_POST['committeenumber'])) {	 
-			return $post_id;	
-		} 
-	    /* Get the meta key. */
-    	$meta_key = 'committeenumber';	 	    /* Get the meta value of the custom field key. */
-	    $meta_value = get_post_meta( $post_id, $meta_key, true );
-		$new_meta_value = absint(strip_tags($_POST['committeenumber']));
-		/* If a new meta value was added and there was no previous value, add it. */
-	    if ( $new_meta_value && '' == $meta_value )
-	        add_post_meta( $post_id, $meta_key, $new_meta_value, true );
-	 
-	    /* If the new meta value does not match the old value, update it. */
-	    elseif ( $new_meta_value && $new_meta_value != $meta_value )
-	        update_post_meta( $post_id, $meta_key, $new_meta_value );	 
-	    /* If there is no new meta value but an old value exists, delete it. */
-	    elseif ( '' == $new_meta_value && $meta_value )
-	        delete_post_meta( $post_id, $meta_key, $meta_value );
-		 
-		
-	}
-	//print HTML for the committee metabox
-	function show_committee_metabox($object) {
-		 wp_nonce_field( basename( __FILE__ ), 'rotary_commmittee_nonce' );?>
-		 
-		 <p><label for="committeenumber">Committee Number:<br />
-	        <input id="committeenumberfield" size="20" name="committeenumber" value="<?php echo esc_attr( get_post_meta( $object->ID, 'committeenumber', true ) ); ?>" /></label></p>
-		 
-<?php }
 	function rotary_connection_types() {
 		p2p_register_connection_type( array(
 		'name' => 'committees_to_users',
