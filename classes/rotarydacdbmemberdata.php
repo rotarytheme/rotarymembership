@@ -462,7 +462,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		$post_id = wp_insert_post($new_post);
 		//add_post_meta($post_id, 'committeenumber', $committee->COMMITTEEID, true);
 		update_field('field_5351b9ef109fe', $committee->COMMITTEEID, $post_id);
-		update_field('field_5351ba0f109ff', $committee->DESCRIPTION, $post_id);
+		update_field('field_5351ba0f109ff', strip_tags($committee->DESCRIPTION), $post_id);
 		$this->connectMemberToCommittee($committee->COMMITTEEID, $post_id);
 
 	}
