@@ -72,15 +72,6 @@ if(function_exists("register_field_group"))
 				'prepend' => '',
 				'append' => '',
 			),
-			array (
-				'key' => 'field_5367f28ccb32e',
-				'label' => 'Committee Featured Image',
-				'name' => 'committee_featured_image',
-				'type' => 'image',
-				'save_format' => 'id',
-				'preview_size' => 'thumbnail',
-				'library' => 'all',
-			),
 		),
 		'location' => array (
 			array (

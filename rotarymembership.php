@@ -239,7 +239,7 @@ class RotaryMembership {
             'hierarchical' => true,  
 			'exclude_from_search' => true,
 			'rewrite' => array("slug" => "committees"),
-            'supports' => array('title', 'comments', 'editor')  
+            'supports' => array('title', 'comments', 'editor', 'thumbnail')  
            );  
       
         register_post_type( 'rotary-committees' , $args );  
