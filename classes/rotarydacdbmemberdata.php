@@ -359,7 +359,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 	function updateDeletedCommitteeStatus() {
 		global $wpdb;
 		$member_table_name = $wpdb->prefix . 'rotarycommittees';
-		$sql = "UPDATE committees SET post_status = 'draft' FROM {$wpdb->posts} as committees INNER JOIN {$wpdb->postmeta} AS pm ON pm.post_id = committees.ID WHERE post_type = 'rotary-committees' AND pm.meta_key = 'committeenumber' AND pm.pm.meta_value NOT IN SELECT committeenum FROM {$member_table_name}";
+		$sql = "UPDATE {$wpdb->posts}  INNER JOIN {$wpdb->postmeta} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID SET {$wpdb->posts}.post_status = 'draft' WHERE {$wpdb->posts}.post_type = 'rotary-committees' AND {$wpdb->postmeta}.meta_key = 'committeenumber' AND {$wpdb->postmeta}.meta_value NOT IN (SELECT committeenum FROM {$member_table_name})";
 		$rows_affected = $wpdb->get_results($sql);
 
 	}	
@@ -377,9 +377,9 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		catch (SoapFault $exception) {
 			echo $exception;	
 		}
-		//print_r($rotaryclubmembers);
 		$member_table_name = $wpdb->prefix . 'rotarymembers';
-		$wpdb->query('TRUNCATE TABLE '.$member_table_name);
+		//print_r($rotaryclubmembers->MEMBERS);
+		//$wpdb->query('TRUNCATE TABLE '.$member_table_name);
   		foreach($rotaryclubmembers->MEMBERS->MEMBER as $member) {
 			if (is_email($member->LOGINNAME)) {
 			  	$username = substr(trim($member->LOGINNAME), 0, strlen($member->LOGINNAME) - 4);
@@ -388,7 +388,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 				$username = $member->LOGINNAME;
 			 }
 			 //add to a DacDB user ids to a custom table that we check to see if a WordPress User is no longer a RotaryMember
-			 $rows_affected = $wpdb->insert( $member_table_name, array('dacdbuser' => $wpdb->escape($username)));
+			// $rows_affected = $wpdb->insert( $member_table_name, array('dacdbuser' => $wpdb->escape($username)));
 			 $memberArray['clubname'] = strval($member->CLUBNAME);
 			 $memberArray['first_name'] = strval($member->FIRSTNAME);
 			 $memberArray['last_name'] = strval($member->LASTNAME);
@@ -445,6 +445,9 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		//$query = 'DELETE FROM '  .$wpdb->users .' WHERE '.$wpdb->users.'.ID != 1 AND '.$wpdb->users.'.user_login NOT IN (SELECT dacdbuser FROM ' .$member_table_name.')';
 		//$wpdb->query($query);
 		$query = 'UPDATE '.$wpdb->usermeta .', ' . $wpdb->users   .' SET meta_value = 0 WHERE meta_key ="memberyesno" AND '.$wpdb->users.'.user_login NOT IN (SELECT dacdbuser FROM ' .$member_table_name.') AND '. $wpdb->usermeta.'.user_id = '. $wpdb->users.'.ID';
+		//echo $query;
+		$wpdb->query($query);
+		$query = 'UPDATE '.$wpdb->usermeta .', ' . $wpdb->users   .' SET meta_value = "" WHERE meta_key ="membersince" AND '.$wpdb->users.'.user_login NOT IN (SELECT dacdbuser FROM ' .$member_table_name.') AND '. $wpdb->usermeta.'.user_id = '. $wpdb->users.'.ID';
 		//echo $query;
 		$wpdb->query($query);
 	}
