@@ -184,7 +184,7 @@ class RotaryProfiles {
         </tr> 
        <!-- Profile Picture -->
        <tr>
-			<th><label for="profilepicture">Profile Picture</label></th>
+			<th><label for="profilepicture">Profile Picture<br/><small>(Clearing this field will cause the profile picture to be refreshed from DaCDb on next update)</small></label></th>
             <td>
         		<div class="uploader">
   					<input type="text" name="profilepicture" id="profilepicture" value="<?php echo esc_attr( get_user_meta( $user->ID, 'profilepicture', true ) ); ?>"  />
