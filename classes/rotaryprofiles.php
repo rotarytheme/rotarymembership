@@ -187,7 +187,7 @@ class RotaryProfiles {
 			<th><label for="profilepicture">Profile Picture</label></th>
             <td>
         		<div class="uploader">
-  					<input type="text" name="profilepicture" id="profilepicture" value="<?php echo esc_attr( get_user_meta( $user->ID, 'profilepicture', true ) ); ?>"  <?php echo $disabled;?>/>
+  					<input type="text" name="profilepicture" id="profilepicture" value="<?php echo esc_attr( get_user_meta( $user->ID, 'profilepicture', true ) ); ?>"  />
   					<input class="button" name="profilepicture_button" id="profilepicture_button" value="Upload"  <?php echo $disabled;?>/>
 				</div>
              </td>
@@ -237,15 +237,7 @@ class RotaryProfiles {
 
 			</td>
 		</tr>
-        <!--Member-->   
-        <tr>
-			<th><label for="memberyesno">Member</label></th>
-
-			<td>
-				<input type="checkbox" name="memberyesno" id="memberyesno"  checked="<?php echo esc_attr( get_user_meta( 'memberyesno', $user->ID, true ) ); ?>"   <?php echo $disabled;?>/><br />
-
-			</td>
-		</tr>
+       
 	</table>
 	<?php }
 	/*
@@ -279,6 +271,9 @@ class RotaryProfiles {
 				update_user_meta( $user_id, 'memberyesno', $_POST['memberyesno'] );
 				update_user_meta( $user_id, 'busweb', $_POST['busweb'] );
 				
+			}
+			else {
+				update_user_meta( $user_id, 'profilepicture', $_POST['profilepicture'] );
 			}
 		
 	}

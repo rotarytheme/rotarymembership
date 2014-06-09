@@ -2,19 +2,19 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.143
+Version: 2.144
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
 */
 // Set path to theme specific functions
-//define( 'ACF_LITE' , true );
+define( 'ACF_LITE' , true );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_PATH', dirname( __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_FILE', plugin_basename( __FILE__ ) );
-//include_once('advanced-custom-fields/acf.php' );
-//include_once('acf-repeater/acf-repeater.php');
-//include_once($includes_path . 'committee-fields.php');
+include_once('advanced-custom-fields/acf.php' );
+include_once('acf-repeater/acf-repeater.php');
+include_once($includes_path . 'committee-fields.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotaryprofiles.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarymemberdata.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarydacdbmemberdata.php');
