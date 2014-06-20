@@ -335,7 +335,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 			$member_table_name = $wpdb->prefix . 'rotarycommittees';
 			$wpdb->query('TRUNCATE TABLE '.$member_table_name);
 			foreach($rotaryclubcommittees->COMMITTEES->COMMITTEE as $committee) {
-			//add committee to custom table to possibly reset status later
+				//add committee to custom table to possibly reset status later
 				$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape($committee->COMMITTEEID)));
 				$args = array(
 				'post_type' => 'rotary-committees',
@@ -350,7 +350,15 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 				$query = new WP_Query($args);
 				if (!$query->have_posts()) {
 					$this->addNewCommittee($committee);
-				} //end check for posts
+				} 
+				else {
+					while ( $query->have_posts() ) {
+						$query->the_post();
+						$this->connectMemberToCommittee($committee->COMMITTEEID, get_the_id());
+					}//endwhile
+				}//end check for posts
+				
+				
 					
 			}//end foreach committee
 				$this->updateDeletedCommitteeStatus();
