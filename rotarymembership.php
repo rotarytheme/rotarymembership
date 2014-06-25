@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.146
+Version: 2.147
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
@@ -239,7 +239,8 @@ class RotaryMembership {
             'hierarchical' => true,  
 			'exclude_from_search' => true,
 			'rewrite' => array("slug" => "committees"),
-            'supports' => array('title', 'comments', 'editor', 'thumbnail')  
+            'supports' => array('title', 'comments', 'editor', 'thumbnail'),
+            'has_archive' => true, 
            );  
       
         register_post_type( 'rotary-committees' , $args );  
@@ -251,6 +252,12 @@ class RotaryMembership {
 		'from' => 'rotary-committees',
 		'to' => 'user'
 	) );
+		p2p_register_connection_type( array(
+		'name' => 'committees_to_posts',
+		'from' => 'rotary-committees',
+		'to' => 'post'
+	) );
+
 	}
 	//shortcodes to display rotary club members
 	function get_rotary_club_members($attr) { 
