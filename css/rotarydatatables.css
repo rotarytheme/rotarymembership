@@ -65,6 +65,10 @@
 }
 .rotarydialog .ui-widget-header, .rotarydialog .ui-widget-content {
 	background:transparent;
+	border:0;
+}
+.rotarydialog .ui-icon {
+	background:none;
 }
 .rotarydialog .ui-dialog-titlebar-close {
 	float:right;
