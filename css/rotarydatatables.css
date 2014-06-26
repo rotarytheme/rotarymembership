@@ -67,7 +67,7 @@
 	background:transparent;
 	border:0;
 }
-.rotarydialog .ui-icon {
+.rotarydialog .ui-icon, .rotarydialog .ui-state-default .ui-icon {
 	background:none;
 }
 .rotarydialog .ui-dialog-titlebar-close {
