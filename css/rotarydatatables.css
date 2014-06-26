@@ -57,6 +57,15 @@
 	line-height:1.2em;
 	width:600px;
 }
+.rotarydialog .ui-state-default, .rotarydialog .ui-widget-content .ui-state-default, .rotarydialog .ui-widget-header .ui-state-default {
+  background: none;
+  border: 0;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+.rotarydialog .ui-widget-header, .rotarydialog .ui-widget-content {
+	background:transparent;
+}
 .rotarydialog .ui-dialog-titlebar-close {
 	float:right;
 	margin-right:30px;
