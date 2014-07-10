@@ -339,14 +339,8 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 				//add committee to custom table to possibly reset status later
 				$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape( $committee->COMMITTEEID ), 'committeename'  => $wpdb->escape( $committee->COMMITTEENAME )));
 				$args = array(
-				'post_type' => 'rotary-committees',
-				'meta_key' => 'committeenumber',
-				'meta_query' => array(
-						array(
-							'key' => 'committeenumber',
-							'value' => $committee->COMMITTEEID,
-						)	
-					) 
+					'post_type' => 'rotary-committees',
+					'post_title ' => '$committee->COMMITTEENAME'
 				);  
 				$query = new WP_Query($args);
 				if (!$query->have_posts()) {
