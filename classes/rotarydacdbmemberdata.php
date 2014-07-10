@@ -317,6 +317,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
    		echo $exception;
   		} 
         if (count($rotaryclubcommittees->COMMITTEES->COMMITTEE)) {
+          
 			//delete existing committees
 			/*$query = '
 				DELETE FROM '.$wpdb->posts. 
@@ -328,15 +329,15 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 			$wpdb->query($query);*/
 		
 			//delete existing user connections
-			 $connect_table_name = $wpdb->prefix . 'p2p';
-			$wpdb->query('TRUNCATE TABLE '.$connect_table_name);
-			$wpdb->query($query);
+			//$connect_table_name = $wpdb->prefix . 'p2p';
+			//$wpdb->query('TRUNCATE TABLE '.$connect_table_name);
+			//$wpdb->query($query);
 			//truncated the committee table
 			$member_table_name = $wpdb->prefix . 'rotarycommittees';
 			$wpdb->query('TRUNCATE TABLE '.$member_table_name);
 			foreach($rotaryclubcommittees->COMMITTEES->COMMITTEE as $committee) {
 				//add committee to custom table to possibly reset status later
-				$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape($committee->COMMITTEEID)));
+				$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape( $committee->COMMITTEEID ), 'committeename'  => $wpdb->escape( $committee->COMMITTEENAME )));
 				$args = array(
 				'post_type' => 'rotary-committees',
 				'meta_key' => 'committeenumber',
@@ -367,8 +368,10 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 	function updateDeletedCommitteeStatus() {
 		global $wpdb;
 		$member_table_name = $wpdb->prefix . 'rotarycommittees';
-		$sql = "UPDATE {$wpdb->posts}  INNER JOIN {$wpdb->postmeta} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID SET {$wpdb->posts}.post_status = 'draft' WHERE {$wpdb->posts}.post_type = 'rotary-committees' AND {$wpdb->postmeta}.meta_key = 'committeenumber' AND {$wpdb->postmeta}.meta_value NOT IN (SELECT committeenum FROM {$member_table_name})";
+			//$sql = "UPDATE {$wpdb->posts}  INNER JOIN {$wpdb->postmeta} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID SET {$wpdb->posts}.post_status = 'draft' WHERE {$wpdb->posts}.post_type = 'rotary-committees' AND {$wpdb->postmeta}.meta_key = 'committeenumber' AND {$wpdb->postmeta}.meta_value NOT IN (SELECT committeenum FROM {$member_table_name})";
+		$sql = "UPDATE {$wpdb->posts} INNER JOIN {$wpdb->postmeta} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID SET {$wpdb->posts}.post_status = 'draft' WHERE {$wpdb->posts}.post_type = 'rotary-committees' AND {$wpdb->postmeta}.meta_key = 'committeenumber' AND {$wpdb->postmeta}.meta_value != '' AND {$wpdb->posts}.post_title NOT IN (SELECT committeename FROM {$member_table_name} )";
 		$rows_affected = $wpdb->get_results($sql);
+		
 
 	}	
 	function updateMemberData() {
@@ -496,30 +499,43 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		catch (SoapFault $exception) {
 			echo $exception;	
 		}
-		foreach($rotaryclubmembers->MEMBERS->MEMBER as $member) {
-			$user_id = email_exists($member->EMAIL);
-			if ($user_id) {
-				//add chair and co-chairs
-				
-				if (in_array(strtoupper($member->COMMITTEEPOSITION), $chairArray)) {
-					update_field('field_5356d453d36ac', $member->EMAIL, $post_id);
+		if ( is_array($rotaryclubmembers->MEMBERS->MEMBER )) {
+			//loop through all users for a committee and delete them
+					$users = get_users( array(
+						'connected_type' => 'committees_to_users',
+						'connected_items' => $post_id,
+						'connected_direction' => 'from',
+					)); 
+					if ( is_array( $users )) {
+						foreach ( $users as $user ) {
+							p2p_type( 'committees_to_users' )->disconnect( $post_id, $user->ID );
+						}
+					}	
+
+			foreach($rotaryclubmembers->MEMBERS->MEMBER as $member) {
+				$user_id = email_exists($member->EMAIL);
+				if ($user_id) {
+					//add chair and co-chairs
+					
+					if (in_array(strtoupper($member->COMMITTEEPOSITION), $chairArray)) {
+						update_field('field_5356d453d36ac', $member->EMAIL, $post_id);
+					}
+					if (in_array(strtoupper($member->COMMITTEEPOSITION), $cochairArray)) {
+					   $coChairCount++;
+					   if (1 == $coChairCount) {
+						   update_field('field_5356d48feb36b', $member->EMAIL, $post_id);
+					   }
+					   else  {
+						   update_field('field_5356d4dbeecc0', $member->EMAIL, $post_id);
+					   }
+							
+					}
+					//from  committees to  user
+					p2p_type( 'committees_to_users' )->connect( $post_id, $user_id, array('date' => current_time('mysql')
+					) );
 				}
-				if (in_array(strtoupper($member->COMMITTEEPOSITION), $cochairArray)) {
-				   $coChairCount++;
-				   if (1 == $coChairCount) {
-					   update_field('field_5356d48feb36b', $member->EMAIL, $post_id);
-				   }
-				   else  {
-					   update_field('field_5356d4dbeecc0', $member->EMAIL, $post_id);
-				   }
-						
-				}
-				//from = committees to = user
-				p2p_type( 'committees_to_users' )->connect( $post_id, $user_id, array('date' => current_time('mysql')
-				) );
-			}
+			} //end foreach
 		}
-		
 	}
 
 }/*end class*/

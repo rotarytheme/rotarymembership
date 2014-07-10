@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.150
+Version: 2.151
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
@@ -55,18 +55,23 @@ class RotaryMembership {
 	//the same will be done for committees
 	function activate() {
 		global $wpdb;
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		
    		$table_name = $wpdb->prefix . 'rotarymembers';
 		$sql = 'CREATE TABLE ' . $table_name .'(
      		id int(11) unsigned NOT NULL auto_increment,
 			dacdbuser varchar(60),
      		PRIMARY KEY  (id)
   		);';
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		
   		dbDelta($sql); 
+  		
   		$table_name = $wpdb->prefix . 'rotarycommittees';
+  		$wpdb->query("DROP TABLE IF EXISTS $table_name");
   		$sql = 'CREATE TABLE ' . $table_name .'(
      		id int(11) unsigned NOT NULL auto_increment,
 			committeenum int(11),
+			committeename text,
      		PRIMARY KEY  (id)
   		);';
   		dbDelta($sql); 
