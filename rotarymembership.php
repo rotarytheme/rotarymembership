@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.152
+Version: 2.154
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
@@ -71,7 +71,6 @@ class RotaryMembership {
   		$sql = 'CREATE TABLE ' . $table_name .'(
      		id int(11) unsigned NOT NULL auto_increment,
 			committeenum int(11),
-			committeename text,
      		PRIMARY KEY  (id)
   		);';
   		dbDelta($sql); 

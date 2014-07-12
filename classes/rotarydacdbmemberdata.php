@@ -291,8 +291,8 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 	 	
 	}
 	function updateCommitteeData() {
-		global $wpdb;
-  			
+
+		global $wpdb;		
 		$todayDate = date("Y-m-d");
     	$thisMonth = date("m");
     	$dateOneYearAdded = strtotime(date("Y-m-d", strtotime($todayDate)) . "+1 year");
@@ -317,38 +317,46 @@ class RotaryDacdbMemberData extends RotaryMemberData{
    		echo $exception;
   		} 
         if (count($rotaryclubcommittees->COMMITTEES->COMMITTEE)) {
-          
-			//delete existing committees
-			/*$query = '
-				DELETE FROM '.$wpdb->posts. 
-				' WHERE post_type = "rotary-committees" ';
-			$wpdb->query($query);
-			$query = '
-				DELETE FROM ' .$wpdb->postmeta. 
-				' WHERE post_id NOT IN (SELECT id FROM '.$wpdb->posts.')';
-			$wpdb->query($query);*/
-		
-			//delete existing user connections
-			//$connect_table_name = $wpdb->prefix . 'p2p';
-			//$wpdb->query('TRUNCATE TABLE '.$connect_table_name);
-			//$wpdb->query($query);
-			//truncated the committee table
 			$member_table_name = $wpdb->prefix . 'rotarycommittees';
 			$wpdb->query('TRUNCATE TABLE '.$member_table_name);
 			foreach($rotaryclubcommittees->COMMITTEES->COMMITTEE as $committee) {
-				//add committee to custom table to possibly reset status later
-				$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape( $committee->COMMITTEEID ), 'committeename'  => $wpdb->escape( $committee->COMMITTEENAME )));
+			//print_r($committee);
+				//first try to get committee by number, this won't work at year end went committee numbers changes
 				$args = array(
-					'post_type' => 'rotary-committees',
-					'post_title ' => '$committee->COMMITTEENAME'
+				'post_type' => 'rotary-committees',
+				'post_status' => 'publish',
+				'meta_query' => array(
+						array(
+							'key' => 'committeenumber',
+							'value' => $committee->COMMITTEEID,
+						)	
+					) 
 				);  
 				$query = new WP_Query($args);
+				//if committe post by id is found found, look for committee by name
 				if (!$query->have_posts()) {
+					$args = array(
+						'post_type' => 'rotary-committees',
+						'post_status' => 'publish',
+						's' => $committee->COMMITTEENAME,
+						'exact' => true, //(bool) - flag to make it only match whole titles/posts - Default value is false. For more information see: https://gist.github.com/2023628#gistcomment-285118
+						'sentence' => true //(bool) - flag to make it do a phrase search - Default value is false. For more information see: https://gist.github.com/2023628#gistcomment-285118
+					);  
+					$query = new WP_Query($args);
+				}
+				//now we know that there are really no posts!	
+				if (!$query->have_posts()) {
+					//add committee to custom table to possibly reset status later
+					$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape( $committee->COMMITTEEID  )));
 					$this->addNewCommittee($committee);
 				} 
 				else {
+					//add committee to custom table to possibly reset status later
 					while ( $query->have_posts() ) {
 						$query->the_post();
+						update_field('field_5351b9ef109fe', $committee->COMMITTEEID, get_the_id());
+						$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape( get_field('committeenumber')  )));
+						wp_update_post( get_post(get_the_id()) );
 						$this->connectMemberToCommittee($committee->COMMITTEEID, get_the_id());
 					}//endwhile
 				}//end check for posts
@@ -362,8 +370,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 	function updateDeletedCommitteeStatus() {
 		global $wpdb;
 		$member_table_name = $wpdb->prefix . 'rotarycommittees';
-			//$sql = "UPDATE {$wpdb->posts}  INNER JOIN {$wpdb->postmeta} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID SET {$wpdb->posts}.post_status = 'draft' WHERE {$wpdb->posts}.post_type = 'rotary-committees' AND {$wpdb->postmeta}.meta_key = 'committeenumber' AND {$wpdb->postmeta}.meta_value NOT IN (SELECT committeenum FROM {$member_table_name})";
-		$sql = "UPDATE {$wpdb->posts} INNER JOIN {$wpdb->postmeta} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID SET {$wpdb->posts}.post_status = 'draft' WHERE {$wpdb->posts}.post_type = 'rotary-committees' AND {$wpdb->postmeta}.meta_key = 'committeenumber' AND {$wpdb->postmeta}.meta_value != '' AND {$wpdb->posts}.post_title NOT IN (SELECT committeename FROM {$member_table_name} )";
+		$sql = "UPDATE {$wpdb->posts}  INNER JOIN {$wpdb->postmeta} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID SET {$wpdb->posts}.post_status = 'draft' WHERE {$wpdb->posts}.post_type = 'rotary-committees' AND {$wpdb->postmeta}.meta_key = 'committeenumber' AND {$wpdb->postmeta}.meta_value != '' AND {$wpdb->postmeta}.meta_value NOT IN (SELECT committeenum FROM {$member_table_name})";
 		$rows_affected = $wpdb->get_results($sql);
 		
 
