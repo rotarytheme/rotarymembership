@@ -439,7 +439,8 @@ class RotaryDacdbMemberData extends RotaryMemberData{
               	wp_update_user( array ('ID' => $user_id, 'user_email' => $memberArray['email']) ) ;
 	
 			  }
-			  if (1 != $user_id ) {
+
+			  if (!is_wp_error($user_id) && 1 != $user_id ) {
 				  
 			  	foreach ($memberArray as $key => $value) {
 				  	if ('profilepicture' == $key) {
@@ -501,7 +502,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		catch (SoapFault $exception) {
 			echo $exception;	
 		}
-		if ( is_array($rotaryclubmembers->MEMBERS->MEMBER )) {
+		if ( is_object($rotaryclubmembers->MEMBERS) && is_array($rotaryclubmembers->MEMBERS->MEMBER )) {
 			//loop through all users for a committee and delete them
 					$users = get_users( array(
 						'connected_type' => 'committees_to_users',
