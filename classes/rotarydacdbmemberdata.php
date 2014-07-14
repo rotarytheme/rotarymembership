@@ -338,7 +338,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 					$args = array(
 						'post_type' => 'rotary-committees',
 						'post_status' => 'publish',
-						's' => htmlspecialchars_decode($committee->COMMITTEENAME),
+						's' => htmlspecialchars($committee->COMMITTEENAME),
 						'exact' => true, //(bool) - flag to make it only match whole titles/posts - Default value is false. For more information see: https://gist.github.com/2023628#gistcomment-285118
 						'sentence' => true //(bool) - flag to make it do a phrase search - Default value is false. For more information see: https://gist.github.com/2023628#gistcomment-285118
 					);  
