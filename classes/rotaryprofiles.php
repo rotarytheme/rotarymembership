@@ -233,7 +233,7 @@ class RotaryProfiles {
 			<th><label for="membersince">Member Since <br/><small>(required for member to appear in member directory)</small></label></th>
 
 			<td>
-				<input type="text" name="membersince" id="membersince" class="datepicker" value="<?php echo esc_attr( get_user_meta( $user->ID, 'membersince', true ) ); ?>"   <?php echo $disabled;?>/><br />
+				<input type="text" name="membersince" id="membersince" class="datepicker" value="<?php echo esc_attr( get_user_meta( $user->ID, 'membersince', true ) ); ?>"  /><br />
 
 			</td>
 		</tr>
@@ -247,6 +247,7 @@ class RotaryProfiles {
 			if ( !current_user_can( 'edit_user', $user_id ) ) {
 				return FALSE;
 			}
+			
 			$options = get_option('rotary_dacdb');
 			if ('yes' != $options['rotary_use_dacdb']) {	
 				update_user_meta( $user_id, 'classification', $_POST['classification'] );
@@ -274,6 +275,7 @@ class RotaryProfiles {
 			}
 			else {
 				update_user_meta( $user_id, 'profilepicture', $_POST['profilepicture'] );
+				update_user_meta( $user_id, 'membersince', $_POST['membersince'] );
 			}
 		
 	}
@@ -312,11 +314,14 @@ class RotaryProfiles {
 				wp_reset_postdata();
 			
 		}
+		
 		foreach ($users as $user) {
+		    
 			$usermeta = get_user_meta($user->ID);
 			if (!isset($usermeta['membersince'][0]) || '' == trim($usermeta['membersince'][0])) {
 				continue;
 			}
+			
 			if ($nameorder == 'firstname') {
 				$memberName = $usermeta['first_name'][0]. ' ' .$usermeta['last_name'][0];
 			}
@@ -325,9 +330,10 @@ class RotaryProfiles {
 			}
 			$emailname = $usermeta['email'][0];
 			$email = count($usermeta['email']) > 0 ? '<a href="mailto:' .antispambot($emailname, 1) .'">Email</a>': '';
+			
 			$row =array($memberName, $usermeta['classification'], $usermeta['partnername'], $usermeta['cellphone'], $usermeta['busphone'], $email, $user->ID);
 			$output['aaData'][] = $row;
-		}
+			}
 		return $output;
 	}
 	function get_users_details_json($memberID) {

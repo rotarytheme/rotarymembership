@@ -338,7 +338,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 					$args = array(
 						'post_type' => 'rotary-committees',
 						'post_status' => 'publish',
-						's' => $committee->COMMITTEENAME,
+						's' => htmlspecialchars_decode($committee->COMMITTEENAME),
 						'exact' => true, //(bool) - flag to make it only match whole titles/posts - Default value is false. For more information see: https://gist.github.com/2023628#gistcomment-285118
 						'sentence' => true //(bool) - flag to make it do a phrase search - Default value is false. For more information see: https://gist.github.com/2023628#gistcomment-285118
 					);  
@@ -347,7 +347,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 				//now we know that there are really no posts!	
 				if (!$query->have_posts()) {
 					//add committee to custom table to possibly reset status later
-					$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape( $committee->COMMITTEEID  )));
+					$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => esc_sql( $committee->COMMITTEEID  )));
 					$this->addNewCommittee($committee);
 				} 
 				else {
@@ -355,7 +355,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 					while ( $query->have_posts() ) {
 						$query->the_post();
 						update_field('field_5351b9ef109fe', $committee->COMMITTEEID, get_the_id());
-						$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => $wpdb->escape( get_field('committeenumber')  )));
+						$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => esc_sql( get_field('committeenumber')  )));
 						wp_update_post( get_post(get_the_id()) );
 						$this->connectMemberToCommittee($committee->COMMITTEEID, get_the_id());
 					}//endwhile
@@ -399,8 +399,9 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 			 else {
 				$username = $member->LOGINNAME;
 			 }
+			 
 			 //add to a DacDB user ids to a custom table that we check to see if a WordPress User is no longer a RotaryMember
-			// $rows_affected = $wpdb->insert( $member_table_name, array('dacdbuser' => $wpdb->escape($username)));
+			 $rows_affected = $wpdb->insert( $member_table_name, array('dacdbuser' => esc_sql($username)));
 			 $memberArray['clubname'] = strval($member->CLUBNAME);
 			 $memberArray['first_name'] = strval($member->FIRSTNAME);
 			 $memberArray['last_name'] = strval($member->LASTNAME);
