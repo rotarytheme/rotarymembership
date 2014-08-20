@@ -320,7 +320,10 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 			$member_table_name = $wpdb->prefix . 'rotarycommittees';
 			$wpdb->query('TRUNCATE TABLE '.$member_table_name);
 			foreach($rotaryclubcommittees->COMMITTEES->COMMITTEE as $committee) {
-			//print_r($committee);
+				//header("Content-type: text/plain");
+				//print_r($committee);
+				//ob_end_flush();
+				//ob_flush();
 				//first try to get committee by number, this won't work at year end went committee numbers changes
 				$args = array(
 				'post_type' => 'rotary-committees',

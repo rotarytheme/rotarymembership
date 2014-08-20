@@ -1,14 +1,33 @@
 <?php
-	function get_memberhsip_layout($rotarymembership) {
-		$memberTable = '<div class="rotarymembershipcontainer"><div class="rotarymembershipheader"><h2>Membership Directory</h2><div class="rotaryselections">
-			<div><input type="radio" id="nameorder1" name="nameorder" value="firstname"/><span>First Last Name</span><input type="radio" id="nameorder2" name="nameorder" value="lastname" checked="checked"/><span>Last, First Name</span><div class="committeecontainer"><span id="committeelabel">Committees</span><select id="commitees">'.$rotarymembership->get_committees_for_membertable().'</select></div></div>
-			</div>
-			<table cellspacing="0" cellpadding="0" border="0" id="rotarymembers" class="display">	
+	function get_memberhsip_layout($rotarymembership, $projects, $id) {
+		$divID = 'rotarymembers';
+		$title = 'Membership Directory';
+		if (isset( $projects ) && strlen( $projects ) > 1 ) {
+			$divID = 'rotary' . $projects;
+		}
+		$dataID = '';
+		$select = '';
+		$hide = '';
+		if (isset($id) && strlen( $id ) > 1 )  {
+			$dataID = ' data-id="'.$id.'"';
+			$hideClass = ' class="hide"';
+			$title = 'Participants';
+			$select = '<div><div class="usercontainer"><select id="newparticipants">'.$rotarymembership->get_users_for_membertable_select().'</select></div>';
+		}
+		else {
+			$select = '<div><input type="radio" id="nameorder1" name="nameorder" value="firstname"/><span>First Last Name</span><input type="radio" id="nameorder2" name="nameorder" value="lastname" checked="checked"/><span>Last, First Name</span><div class="committeecontainer"><span id="committeelabel">Committees</span><select id="commitees">'.$rotarymembership->get_committees_for_membertable().'</select></div></div>';
+
+		}
+
+		$memberTable = '<div class="rotarymembershipcontainer"><div class="rotarymembershipheader"><h2>'.$title.'</h2><div class="rotaryselections">'
+			.$select.
+			'</div>
+			<table cellspacing="0" cellpadding="0" border="0" id="'.$divID.'" class="display"'.$dataID.'>	
        		<thead>
 			<tr>	
         		<th class="fullname">Name</th>		         
-        		<th>Classification</th>		         
-        		<th>Partner</th>                         
+        		<th'.$hideClass.'>Classification</th>		         
+        		<th'.$hideClass.'>Partner</th>                         
         		<th>Cell/Home Phone</th>                         
         		<th>Business Phone</th>                         
         		<th>Email</th>

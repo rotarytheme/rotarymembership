@@ -1,23 +1,23 @@
 /*datatables*/
-#rotarymembers {
+#rotarymembers, #rotaryprojects {
 	margin-bottom:10px;
 	width:100%;
 }
-#rotarymembers tr {
+#rotarymembers tr, #rotaryprojects tr {
 	max-width:100%;
 }
-#rotarymembers tr td {
+#rotarymembers tr td,  #rotaryprojects tr td {
 	padding:6px;
 }
 
-#rotarymembers .fullname {padding-right:100px;}
+#rotarymembers .fullname, #rotaryprojects .fullname {padding-right:100px;}
 .sorting_asc {
 	background: url(images/sort_asc.png) no-repeat scroll 95% center transparent;
 }
 .sorting_desc {
 	background: url(images/sort_desc.png) no-repeat scroll 95% center transparent;
 }
-#rotarymembers th {
+#rotarymembers th, #rotaryprojects th {
 	cursor:pointer;
 }
 .dataTables_info {
@@ -161,7 +161,7 @@
 	line-height:1.1em;
 	padding-top:10px;
 }
-#rotarymembers td.username {
+#rotarymembers td.username, #rotaryprojects td.username {
 	cursor:pointer;
 }
 #rotarymemberdialog .dialogbottom {
@@ -178,7 +178,7 @@
 .rotaract #rotarymemberdialog .dialogbottom .rotaryclub {
 	display: none;
 }
-#rotarymembers_length {
+#rotarymembers_length, #rotaryprojects_length {
 	display:none;
 }
 #rotarymemberdialog .dialogbottom p {

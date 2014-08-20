@@ -10,7 +10,9 @@ class RotaryProfiles {
 		add_action( 'edit_user_profile_update', array( $this, 'update_membership_profile_fields'));
 		add_filter( 'get_avatar', array( $this, 'get_rotary_member_avatar'), 10, 5);
 		
-	}
+	}	 
+
+
 	/*
 	this function will display the profile picture intead of the avatar
 	*/
@@ -287,8 +289,15 @@ class RotaryProfiles {
 			'iTotalDisplayRecords' =>10,
 			'aaData' => array()
 		);
-		
-		if ($_GET['commitees'] == "all" || ! isset($_GET['commitees'] )) {
+		if (isset( $_GET['id'] ) ) {
+			$users = get_users( array(
+  				'connected_type' => 'projects_to_users',
+  				'connected_items' => $_GET['id'],
+				'connected_direction' => 'from',
+			));
+		}
+		elseif ( ! isset($_GET['commitees'] ) || $_GET['commitees'] == "all" ) {
+
 			$args = array(
 				'exclude' => array(
 				 1
@@ -385,7 +394,7 @@ class RotaryProfiles {
 		}
 		return $output;
 	}
-	    
+	   
 		
 
 }//end class
