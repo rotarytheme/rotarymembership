@@ -2,19 +2,19 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.159
+Version: 2.160
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
 */
 // Set path to theme specific functions
-define( 'ACF_LITE' , true );
+//define( 'ACF_LITE' , true );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_PATH', dirname( __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_FILE', plugin_basename( __FILE__ ) );
-include_once('advanced-custom-fields/acf.php' );
-include_once('acf-repeater/acf-repeater.php');
-include_once($includes_path . 'committee-fields.php');
+//include_once('advanced-custom-fields/acf.php' );
+//include_once('acf-repeater/acf-repeater.php');
+//include_once($includes_path . 'committee-fields.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotaryprofiles.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarymemberdata.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarydacdbmemberdata.php');
@@ -414,19 +414,28 @@ class RotaryMembership {
 	 }
 	 //add a new mmber to a project
 	 function rotary_add_project_members() {
+		 $current_user = wp_get_current_user();
+		 $response = array(
+		 	'status' => 'error',
+		 	'message' => 'Invalid nonce',
+		 );
 	     //security check
 	     $nonce = $_POST['nonce'];
 	     if ( ! wp_verify_nonce( $nonce, 'rotary-table-nonce' ) ) {
-	     	die( json_encode( 'invalid request' ) );
+	     	die( json_encode( $response ) );
 	     }	
 		 //check if connection exists
 		 $p2p_id = p2p_type( 'projects_to_users' )->get_p2p_id( $_POST['project_id'], $_POST['user_id'] );
 		 if ( ! $p2p_id ) {
 		 	p2p_type( 'projects_to_users' )->connect( $_POST['project_id'], $_POST['user_id'], array('date' => current_time('mysql')));
-		 	die( json_encode( 'success' ) );
+		 	$response['status'] = 'success';
+		 	$response['message'] = $current_user->ID;
+		 	die( json_encode( $response ) );
 		 }
 		 else {
-			 die( json_encode( 'not added' ) );
+			 $response['message'] = $current_user->ID;
+			 $response['status'] = 'not added';
+			 die( json_encode( $response ) );
 		 }
 		 
 	 }
