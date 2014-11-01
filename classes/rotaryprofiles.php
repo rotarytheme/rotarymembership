@@ -341,6 +341,9 @@ class RotaryProfiles {
 			$email = count($usermeta['email']) > 0 ? '<a href="mailto:' .antispambot($emailname, 1) .'">Email</a>': '';
 			
 			$row =array($memberName, $usermeta['classification'], $usermeta['partnername'], $usermeta['cellphone'], $usermeta['busphone'], $email, $user->ID);
+			if (isset( $_GET['id'] ) ) {
+				array_push( $row, 'X');
+			}	
 			$output['aaData'][] = $row;
 			}
 		return $output;

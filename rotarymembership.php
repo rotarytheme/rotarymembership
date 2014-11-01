@@ -2,19 +2,19 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.160
+Version: 2.161
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
 */
 // Set path to theme specific functions
-//define( 'ACF_LITE' , true );
+define( 'ACF_LITE' , true );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_PATH', dirname( __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_FILE', plugin_basename( __FILE__ ) );
-//include_once('advanced-custom-fields/acf.php' );
-//include_once('acf-repeater/acf-repeater.php');
-//include_once($includes_path . 'committee-fields.php');
+include_once('advanced-custom-fields/acf.php' );
+include_once('acf-repeater/acf-repeater.php');
+include_once($includes_path . 'committee-fields.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotaryprofiles.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarymemberdata.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarydacdbmemberdata.php');
@@ -47,6 +47,8 @@ class RotaryMembership {
 		add_action( 'wp_ajax_rotarymembers', array($this, 'rotary_get_members' ));
 		add_action( 'wp_ajax_nopriv_projectmembers', array($this, 'rotary_add_project_members' ));
 		add_action( 'wp_ajax_projectmembers', array($this, 'rotary_add_project_members' ));
+		add_action( 'wp_ajax_nopriv_deleteprojectmember', array($this, 'rotary_delete_project_member' ));
+		add_action( 'wp_ajax_deleteprojectmember', array($this, 'rotary_delete_project_member' ));
 		add_action( 'wp_ajax_nopriv_rotarymemberdetails', array($this, 'rotary_get_member_details' ));
 		add_action( 'wp_ajax_rotarymemberdetails', array($this, 'rotary_get_member_details' ));	
 		/*the next code is to register plugins for inclusion with the theme*/
@@ -411,6 +413,23 @@ class RotaryMembership {
 		 }
 		 die(json_encode($this->rotaryProfiles->get_users_details_json($_GET['memberID'])));
 		
+	 }
+	 //delete a member from a project
+	 function rotary_delete_project_member() {
+		 $current_user = wp_get_current_user();
+		 $response = array(
+		 	'status' => 'error',
+		 	'message' => 'Invalid nonce',
+		 );
+	     //security check
+	     $nonce = $_POST['nonce'];
+	     if ( ! wp_verify_nonce( $nonce, 'rotary-table-nonce' ) ) {
+	     	die( json_encode( $response ) );
+	     }	
+	     p2p_type( 'projects_to_users' )->disconnect( $_POST['project_id'], $_POST['user_id'], array('date' => current_time('mysql')));
+		 $response['status'] = 'success';
+		 $response['message'] = $current_user->ID;
+		 die( json_encode( $response ) );
 	 }
 	 //add a new mmber to a project
 	 function rotary_add_project_members() {

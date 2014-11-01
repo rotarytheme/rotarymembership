@@ -2,6 +2,7 @@
 	function get_memberhsip_layout($rotarymembership, $projects, $id) {
 		$divID = 'rotarymembers';
 		$title = 'Membership Directory';
+		$deleteCol = '';
 		if (isset( $projects ) && strlen( $projects ) > 1 ) {
 			$divID = 'rotary' . $projects;
 		}
@@ -12,6 +13,7 @@
 			$dataID = ' data-id="'.$id.'"';
 			$hideClass = ' class="hide"';
 			$title = 'Participants';
+			$deleteCol = '<th>Delete</th>';
 			$select = '<div><div class="usercontainer"><select id="newparticipants">'.$rotarymembership->get_users_for_membertable_select().'</select></div>';
 		}
 		else {
@@ -31,8 +33,8 @@
         		<th>Cell/Home Phone</th>                         
         		<th>Business Phone</th>                         
         		<th>Email</th>
-				<th class="hide">ID</th>
-        	</tr>
+        		<th class="hide">ID</th>'.$deleteCol.
+        	'</tr>
 			</thead>
 			<tbody></tbody>
         	</table>

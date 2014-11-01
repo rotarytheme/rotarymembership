@@ -60,6 +60,10 @@ jQuery(document).ready(function($) {
 					'sClass': 'username',
 					'aTargets': [0]
 				}, {
+					'sClass': 'delete',
+					'bSortable' : false, 
+					'aTargets': [7]
+				},{
 					'sClass': 'email',
 					'aTargets': [5]
 				}, {
@@ -89,12 +93,43 @@ jQuery(document).ready(function($) {
 				}
 			});
 			$(document).on('click', '#rotarymembers td.username, #rotaryprojects td.username', this.showDetails);
+			$(document).on('click', '#rotaryprojects td.delete', this.deleteMember);
 			$('.rotaryselections input[name=nameorder]').on('click', this.reloadMembers);
 			$('.rotaryselections #commitees').on('change', this.reloadMembers);
 			$('.rotaryselections #newparticipants').on('change', this.addProjectMembers);
 		},
 		reloadMembers: function(e) {
 			rotaryTable.fnReloadAjax();
+		},
+		deleteMember: function(e) {
+			var $rotaryProjects = $('#rotaryprojects');
+			$userID  = ($(this).siblings('.userid').text());	
+			var $imgoing = $('.imgoing');					
+			jQuery.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: rotarydatatables.ajaxURL,
+				data: {
+					action: 'deleteprojectmember',
+					project_id: $rotaryProjects.data('id'),
+					user_id: $userID,
+					nonce: rotarydatatables.tableNonce
+				},
+				success: function(response, textStatus, jqXHR) {
+					if (200 == jqXHR.status && 'success' == textStatus) {
+						if ('success' === response.status) {					
+							if (parseInt($userID) === parseInt(response.message)) {
+								if ($imgoing.length) {
+									$imgoing.removeClass('going');
+									$imgoing.prev('.imgoingtext').text("I'm not going");
+
+								}
+							}
+							projectsTable.fnReloadAjax();
+						}
+					}
+				}
+				});
 		},
 		addProjectMembers: function(e) {
 			var $rotaryProjects = $('#rotaryprojects');
@@ -125,7 +160,8 @@ jQuery(document).ready(function($) {
 					}
 				}
 				});
-			}, displayMember: function(ajaxResponse) {
+			}, 
+			displayMember: function(ajaxResponse) {
 				var memberDetailData = jQuery.parseJSON(ajaxResponse),
 					$rotarymemberdialog = $('#rotarymemberdialog');
 				$rotarymemberdialog.find('.membername').html(memberDetailData.memberName);
