@@ -120,7 +120,8 @@ jQuery(document).ready(function($) {
 						if ('success' === response.status) {					
 							if (parseInt($userID) === parseInt(response.message)) {
 								if ($imgoing.length) {
-									$imgoing.removeClass('going');
+									$imgoing.removeClass('going').addClass('notgoing');
+									$imgoing.prev('.imgoingtext').removeClass('going').addClass('notgoing');
 									$imgoing.prev('.imgoingtext').text("I'm not going");
 
 								}
@@ -150,7 +151,8 @@ jQuery(document).ready(function($) {
 						if ('success' === response.status) {					
 							if (parseInt($userID) === parseInt(response.message)) {
 								if ($imgoing.length) {
-									$imgoing.addClass('going');
+									$imgoing.addClass('going').removeClass('notgoing');
+									$imgoing.prev('.imgoingtext').addClass('going').removeClass('notgoing');
 									$imgoing.prev('.imgoingtext').text("I'm going");
 
 								}
