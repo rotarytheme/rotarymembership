@@ -2,6 +2,10 @@
 /*
 	Soap Authorizations
 */
+if (! class_exists('SoapClient') ) :
+	require_once('SOAP/Client.php'); // For use with PEAR SOAP module. Comment out if using PHP SOAP
+endif;
+
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotaryauth.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarydacdbmemberdata.php');
 /**

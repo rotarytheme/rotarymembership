@@ -122,7 +122,7 @@ jQuery(document).ready(function($) {
 								if ($imgoing.length) {
 									$imgoing.removeClass('going').addClass('notgoing');
 									$imgoing.prev('.imgoingtext').removeClass('going').addClass('notgoing');
-									$imgoing.prev('.imgoingtext').text("I'm not going");
+									$imgoing.prev('.imgoingtext').html("I'm not going<br />Click to<br />change RSVP");
 
 								}
 							}
@@ -153,7 +153,7 @@ jQuery(document).ready(function($) {
 								if ($imgoing.length) {
 									$imgoing.addClass('going').removeClass('notgoing');
 									$imgoing.prev('.imgoingtext').addClass('going').removeClass('notgoing');
-									$imgoing.prev('.imgoingtext').text("I'm going");
+									$imgoing.prev('.imgoingtext').html("I'm going<br />Click to<br />change RSVP");
 
 								}
 							}
