@@ -4,7 +4,7 @@
  *implementing classes should extend RotaryAuth 
 */
 abstract class RotaryAuth {
-	function auth_check_login() {
+	function auth_check_login($user, $username, $password) {
 	  //to be implemented by sub classes
 	}
 	function auth_errors() {
