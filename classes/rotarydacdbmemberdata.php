@@ -351,7 +351,8 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 				if (!$query->have_posts()) {
 					//add committee to custom table to possibly reset status later
 					$rows_affected = $wpdb->insert( $member_table_name, array('committeenum' => esc_sql( $committee->COMMITTEEID  )));
-					$this->addNewCommittee($committee);
+					// commenting this out because it s creating dupicate committees
+					// $this->addNewCommittee($committee);
 				} 
 				else {
 					//add committee to custom table to possibly reset status later
