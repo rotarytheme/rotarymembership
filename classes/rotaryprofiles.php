@@ -338,7 +338,8 @@ class RotaryProfiles {
 				$memberName = $usermeta['last_name'][0]. ', ' .$usermeta['first_name'][0];
 			}
 			$emailname = $usermeta['email'][0];
-			$email = count($usermeta['email']) > 0 ? '<a href="mailto:' .antispambot($emailname, 1) .'">Email</a>': '';
+			//$email = count($usermeta['email']) > 0 ? '<a href="mailto:' .antispambot($emailname, 1) .'">Email</a>': '';
+			$email = count($usermeta['email']) > 0 ? '<span class="emailselect">Email<span class="emailaddress">'.$emailname.'</span></span>': '';
 			
 			$row =array($memberName, $usermeta['classification'], $usermeta['partnername'], $usermeta['cellphone'], $usermeta['busphone'], $email, $user->ID);
 			if (isset( $_GET['id'] ) ) {
@@ -393,6 +394,7 @@ class RotaryProfiles {
 			$output['clubname'] = $usermeta['clubname'];
 		}
 		else {
+			
 			$output['clubname'] = $options['rotary_dacdb_club_name'];
 		}
 		return $output;

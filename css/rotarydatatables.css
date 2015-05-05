@@ -43,11 +43,14 @@
 	width:200px;
 	float:left;
 }
-.dataTable .email a {
+.dataTable .email a, .dataTable .email .emailselect {
 	background:url(images/email-bg.gif) no-repeat;
 	display:block;
 	height:12px;
 	text-indent:20px;
+}
+.dataTable .email .emailaddress {
+	display:none;
 }
 .rotarydialog {
 	background:#fff;

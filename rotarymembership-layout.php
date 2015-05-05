@@ -14,10 +14,10 @@
 			$hideClass = ' class="hide"';
 			$title = 'Participants';
 			$deleteCol = '<th>Delete</th>';
-			$select = '<div><div class="usercontainer"><select id="newparticipants">'.$rotarymembership->get_users_for_membertable_select().'</select></div></div>';
+			$select = '<div><div class="usercontainer"><select id="newparticipants">'.$rotarymembership->get_users_for_membertable_select().'</select></div><div class="sendemail"><input id="sendmailbutton" type="button" value="email"/></div></div>';
 		}
 		else {
-			$select = '<div><input type="radio" id="nameorder1" name="nameorder" value="firstname"/><span>First Last Name</span><input type="radio" id="nameorder2" name="nameorder" value="lastname" checked="checked"/><span>Last, First Name</span><div class="committeecontainer"><span id="committeelabel">Committees</span><select id="commitees">'.$rotarymembership->get_committees_for_membertable().'</select></div></div>';
+			$select = '<div><input type="radio" id="nameorder1" name="nameorder" value="firstname"/><span>First Last Name</span><input type="radio" id="nameorder2" name="nameorder" value="lastname" checked="checked"/><span>Last, First Name</span><div class="committeecontainer"><span id="committeelabel">Committees</span><select id="commitees">'.$rotarymembership->get_committees_for_membertable().'</select></div><div class="sendemail"><input id="sendmailbutton" type="button" value="email"/></div></div>';
 
 		}
 

@@ -94,12 +94,28 @@ jQuery(document).ready(function($) {
 			});
 			$(document).on('click', '#rotarymembers td.username, #rotaryprojects td.username', this.showDetails);
 			$(document).on('click', '#rotaryprojects td.delete', this.deleteMember);
+			$(document).on('click', '#rotarymembers td.email, #rotaryprojects td.email', this.selectEmail);
+			$('#sendmailbutton').on('click', this.sendEmail);
 			$('.rotaryselections input[name=nameorder]').on('click', this.reloadMembers);
 			$('.rotaryselections #commitees').on('change', this.reloadMembers);
 			$('.rotaryselections #newparticipants').on('change', this.addProjectMembers);
 		},
 		reloadMembers: function(e) {
 			rotaryTable.fnReloadAjax();
+		},
+		selectEmail: function() {
+			$(this).parent('tr').toggleClass('rowselected');
+		},
+		sendEmail: function() {
+			var $emailaddress = $('.rowselected').find('.emailaddress');
+			var mailto = 'mailto:'
+			$( $emailaddress ).each(function( index ) {
+				mailto += $( this ).text() + ',';
+			});
+			
+			if ('mailto:' !== $.trim(mailto)) {
+				window.open(mailto);
+			}
 		},
 		deleteMember: function(e) {
 			var $rotaryProjects = $('#rotaryprojects');
