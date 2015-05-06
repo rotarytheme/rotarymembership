@@ -116,7 +116,8 @@ jQuery(document).ready(function($) {
 			});
 			
 			if ('mailto:' !== $.trim(mailto)) {
-				window.open(mailto);
+				var emailWindow = window.open(mailto);
+				emailWindow.close();
 			}
 		},
 		deleteMember: function(e) {
