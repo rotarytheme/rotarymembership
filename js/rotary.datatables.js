@@ -17,13 +17,16 @@ jQuery(document).ready(function($) {
 				'iDisplayLength': -1,
 				'aoColumnDefs': [{
 					'sClass': 'hide userid',
-					'aTargets': [6]
+					'aTargets': [7]
 				}, {
 					'sClass': 'username',
 					'aTargets': [0]
 				}, {
 					'sClass': 'email',
 					'aTargets': [5]
+				},{
+					'sClass': 'groupemail',
+					'aTargets': [6]
 				}],
 				'fnServerData': function(sSource, aoData, fnCallback) { /* Add some extra data to the sender */
 					//alert($('#commitees option:selected').val());
@@ -55,17 +58,20 @@ jQuery(document).ready(function($) {
 				'iDisplayLength': -1,
 				'aoColumnDefs': [{
 					'sClass': 'hide userid',
-					'aTargets': [6]
+					'aTargets': [7]
 				}, {
 					'sClass': 'username',
 					'aTargets': [0]
 				}, {
 					'sClass': 'delete',
 					'bSortable' : false, 
-					'aTargets': [7]
+					'aTargets': [8]
 				},{
 					'sClass': 'email',
 					'aTargets': [5]
+				},{
+					'sClass': 'groupemail',
+					'aTargets': [6]
 				}, {
 					'sClass': 'hide',
 					'aTargets': [1]
@@ -94,7 +100,6 @@ jQuery(document).ready(function($) {
 			});
 			$(document).on('click', '#rotarymembers td.username, #rotaryprojects td.username', this.showDetails);
 			$(document).on('click', '#rotaryprojects td.delete', this.deleteMember);
-			$(document).on('click', '#rotarymembers td.email, #rotaryprojects td.email', this.selectEmail);
 			$('#sendmailbutton').on('click', this.sendEmail);
 			$('.rotaryselections input[name=nameorder]').on('click', this.reloadMembers);
 			$('.rotaryselections #commitees').on('change', this.reloadMembers);
@@ -103,12 +108,9 @@ jQuery(document).ready(function($) {
 		reloadMembers: function(e) {
 			rotaryTable.fnReloadAjax();
 		},
-		selectEmail: function() {
-			$(this).parent('tr').toggleClass('rowselected');
-		},
 		sendEmail: function() {
-			var $emailaddress = $('.rowselected').find('.emailaddress');
-			var mailto = 'mailto:'
+			var $emailaddress = $('.emailselect:checked').next('.emailaddress');
+			var mailto = 'mailto:';
 			$( $emailaddress ).each(function( index ) {
 				mailto += $( this ).text() + ',';
 			});

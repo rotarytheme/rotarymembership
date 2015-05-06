@@ -338,10 +338,10 @@ class RotaryProfiles {
 				$memberName = $usermeta['last_name'][0]. ', ' .$usermeta['first_name'][0];
 			}
 			$emailname = $usermeta['email'][0];
-			//$email = count($usermeta['email']) > 0 ? '<a href="mailto:' .antispambot($emailname, 1) .'">Email</a>': '';
-			$email = count($usermeta['email']) > 0 ? '<span class="emailselect">Email<span class="emailaddress">'.$emailname.'</span></span>': '';
+			$email = count($usermeta['email']) > 0 ? '<a href="mailto:' . antispambot($emailname, 1) .'">Email</a>': '';
+			$groupemail = count($usermeta['email']) > 0 ? '<input class="emailselect" type="checkbox"/><span class="emailaddress">'. antispambot($emailname, 1) .'</span>': '';
 			
-			$row =array($memberName, $usermeta['classification'], $usermeta['partnername'], $usermeta['cellphone'], $usermeta['busphone'], $email, $user->ID);
+			$row =array($memberName, $usermeta['classification'], $usermeta['partnername'], $usermeta['cellphone'], $usermeta['busphone'], $email, $groupemail, $user->ID);
 			if (isset( $_GET['id'] ) ) {
 				array_push( $row, 'X');
 			}	

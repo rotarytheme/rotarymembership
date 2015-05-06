@@ -33,6 +33,7 @@
         		<th>Cell/Home Phone</th>                         
         		<th>Business Phone</th>                         
         		<th>Email</th>
+        		<th>Group Email</th>
         		<th class="hide">ID</th>'.$deleteCol.
         	'</tr>
 			</thead>
