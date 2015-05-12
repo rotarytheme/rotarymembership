@@ -20,13 +20,13 @@ jQuery(document).ready(function($) {
 					'aTargets': [7]
 				}, {
 					'sClass': 'username',
-					'aTargets': [0]
+					'aTargets': [1]
 				}, {
 					'sClass': 'email',
-					'aTargets': [5]
+					'aTargets': [6]
 				},{
 					'sClass': 'groupemail',
-					'aTargets': [6]
+					'aTargets': [0]
 				}],
 				'fnServerData': function(sSource, aoData, fnCallback) { /* Add some extra data to the sender */
 					//alert($('#commitees option:selected').val());
@@ -61,7 +61,7 @@ jQuery(document).ready(function($) {
 					'aTargets': [7]
 				}, {
 					'sClass': 'username',
-					'aTargets': [0]
+					'aTargets': [1]
 				}, {
 					'sClass': 'delete',
 					'bSortable' : false, 
@@ -71,7 +71,7 @@ jQuery(document).ready(function($) {
 					'aTargets': [5]
 				},{
 					'sClass': 'groupemail',
-					'aTargets': [6]
+					'aTargets': [0]
 				}, {
 					'sClass': 'hide',
 					'aTargets': [1]
@@ -116,8 +116,7 @@ jQuery(document).ready(function($) {
 			});
 			
 			if ('mailto:' !== $.trim(mailto)) {
-				var emailWindow = window.open(mailto);
-				emailWindow.close();
+				window.open(mailto);
 			}
 		},
 		deleteMember: function(e) {
