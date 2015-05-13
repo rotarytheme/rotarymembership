@@ -71,13 +71,14 @@ jQuery(document).ready(function($) {
 					'aTargets': [5]
 				},{
 					'sClass': 'groupemail',
+					'bSortable' : false,
 					'aTargets': [0]
 				}, {
 					'sClass': 'hide',
-					'aTargets': [1]
+					'aTargets': [2]
 				}, {
 					'sClass': 'hide',
-					'aTargets': [2]
+					'aTargets': [3]
 				}],
 				'fnServerData': function(sSource, aoData, fnCallback) { /* Add some extra data to the sender */
 					//alert($('#commitees option:selected').val());
