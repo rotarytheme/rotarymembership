@@ -397,13 +397,14 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		//print_r($rotaryclubmembers->MEMBERS);
 		//$wpdb->query('TRUNCATE TABLE '.$member_table_name);
   		foreach($rotaryclubmembers->MEMBERS->MEMBER as $member) {
-			if (is_email($member->LOGINNAME)) {
+	  		//the following is old code from when WP did not allow usernames
+			/*if (is_email($member->LOGINNAME)) {
 			  	$username = substr(trim($member->LOGINNAME), 0, strlen($member->LOGINNAME) - 4);
 			 }
 			 else {
 				$username = $member->LOGINNAME;
-			 }
-			 
+			 }*/
+			 $username = $member->LOGINNAME;
 			 //add to a DacDB user ids to a custom table that we check to see if a WordPress User is no longer a RotaryMember
 			 $rows_affected = $wpdb->insert( $member_table_name, array('dacdbuser' => esc_sql($username)));
 			 $memberArray['clubname'] = strval($member->CLUBNAME);
