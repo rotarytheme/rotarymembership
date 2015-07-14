@@ -284,10 +284,12 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		$options = get_option('rotary_dacdb');	
 	 	if (false ===  get_transient('dacdb_'.$options['rotary_dacdb_club']) ||  defined( 'WP_ROTARY_MEMBERS_FORCE_UPDATE')) {
 		  	$this->updateMemberData();
-			//members are updated first so that they are in place to add to committees
-			//$this->updateCommitteeData();
 			set_transient('dacdb_'.$options['rotary_dacdb_club'], 'dacdb', 60*60*24*7); 
 	 	}
+	 	//members are updated first so that they are in place to add to committees
+		if ( defined ( 'WP_ROTARY_COMMITTEES_FORCE_UPDATE' ) ) {
+			$this->updateCommitteeData();
+		}
 	 	
 	}
 	function updateCommitteeData() {
