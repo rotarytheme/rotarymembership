@@ -281,6 +281,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
 		
 	}
 	function getMemberData() {
+		
 		$options = get_option('rotary_dacdb');	
 	 	if (false ===  get_transient('dacdb_'.$options['rotary_dacdb_club']) ||  defined( 'WP_ROTARY_MEMBERS_FORCE_UPDATE')) {
 		  	$this->updateMemberData();
