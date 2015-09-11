@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.177
+Version: 2.178
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
@@ -370,8 +370,12 @@ class RotaryMembership {
 	}
 	//shortcodes to display rotary club members
 	function get_rotary_club_members($atts) { 
+	 	$not_loggedin_msg = " Rotary members";
+		if  ('rotary_projects' == get_post_type() ) :
+			$not_loggedin_msg = " project participants";
+		endif;
 	 	if (!is_user_logged_in() ) {
-			$memberTable = '<p>You must be logged in to view the Rotary member data</p>
+			$memberTable = '<div class="rotarymembernotloggedin"><p>You must be logged in to see' . $not_loggedin_msg. '</p>
 			<p>'.wp_loginout( get_permalink(), false ).'</p>';
 			
 	 	}

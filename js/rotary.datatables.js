@@ -68,7 +68,7 @@ jQuery(document).ready(function($) {
 					'aTargets': [8]
 				},{
 					'sClass': 'email',
-					'aTargets': [5]
+					'aTargets': [6]
 				},{
 					'sClass': 'groupemail',
 					'bSortable' : false,
