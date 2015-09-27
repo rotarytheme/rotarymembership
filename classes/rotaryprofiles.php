@@ -281,12 +281,12 @@ class RotaryProfiles {
 			}
 		
 	}
-	function get_users_json($nameorder) {
+	function get_users_json( $nameorder ) {
 		$output = array(
-        	'sColumns' => 'Name, Classification, Cell/Home Phone, Business Phone, Email',
-        	'sEcho' => isset($_GET['sEcho']) ? intval($_GET['sEcho']) : null,
-			'iTotalRecords' => isset($rotaryclubmembers) ? count($rotaryclubmembers->MEMBER) : 0,
-			'iTotalDisplayRecords' =>10,
+        	'sColumns' => 'Name, Classification, Cell/Home Phone, Business Phone, Phone, Email',
+        	'sEcho' => isset( $_GET['sEcho'] ) ? intval($_GET['sEcho']) : null,
+			'iTotalRecords' => isset( $rotaryclubmembers ) ? count( $rotaryclubmembers->MEMBER ) : 0,
+			'iTotalDisplayRecords' => 10,
 			'aaData' => array()
 		);
 		if (isset( $_GET['id'] ) ) {
@@ -296,20 +296,20 @@ class RotaryProfiles {
 				'connected_direction' => 'from',
 			));
 		}
-		elseif ( ! isset($_GET['commitees'] ) || $_GET['commitees'] == "all" ) {
+		elseif ( ! isset($_GET['committees'] ) || $_GET['committees'] == "all" ) {
 
 			$args = array(
 				'exclude' => array(
 				 1
 				)
 			);
-			$users = get_users($args);
+			$users = get_users( $args );
 		}
 		else {
 			$args = array(
 			  	'posts_per_page' => 1,
 			 	'post_type' 	 => 'rotary-committees',
-			 	'p'              => $_GET['commitees']
+			 	'p'              => $_GET['committees']
 			);
 			$query = new WP_Query( $args );	
 				while ( $query->have_posts() ) : $query->the_post();
@@ -324,10 +324,10 @@ class RotaryProfiles {
 			
 		}
 		
-		foreach ($users as $user) {
+		foreach ( $users as $user ) {
 		    
 			$usermeta = get_user_meta($user->ID);
-			if (!isset($usermeta['membersince'][0]) || '' == trim($usermeta['membersince'][0])) {
+			if ( !isset($usermeta['membersince'][0] ) || '' == trim( $usermeta['membersince'][0] )) {
 				continue;
 			}
 			
@@ -340,8 +340,23 @@ class RotaryProfiles {
 			$emailname = $usermeta['email'][0];
 			$email = count($usermeta['email']) > 0 ? '<a href="mailto:' . antispambot($emailname, 1) .'">Email</a>': '';
 			$groupemail = count($usermeta['email']) > 0 ? '<input class="emailselect" type="checkbox"/><span class="emailaddress">'. antispambot($emailname, 1) .'</span>': '';
+			$phone = 	(( $usermeta['cellphone'][0] ) ? $usermeta['cellphone'][0] . '&nbsp;[' . _x( 'h', 'Home/Cellphone Abbreviation', 'rotary' ) .']' : '' ) . 
+						(( $usermeta['cellphone'][0] && $usermeta['busphone'][0] ) ? 	'<br>' : '' ) . 
+						(( $usermeta['busphone'][0] ) ? $usermeta['busphone'][0] . '&nbsp;[' . _x( 'w', 'Workphone Abbreviation', 'rotary' ) .']' : '' ) . 
+						((( $usermeta['cellphone'][0] || $usermeta['busphone'][0] )  && $usermeta['email'][0] ) ? 	'<br>' : '' ) . 
+						(( $usermeta['email'] ) ? '<a class="email" href="mailto:' . antispambot( $emailname, 1 ) .'">' . _x( 'Send Email', 'Email Address Abbreviation', 'rotary' ) .'</a>': '' ) ;
 			
-			$row =array($groupemail, $memberName, $usermeta['classification'], $usermeta['partnername'], $usermeta['cellphone'], $usermeta['busphone'], $email, $user->ID);
+			$row =array(
+						$groupemail, 
+						$memberName, 
+						$usermeta['classification'], 
+						$usermeta['partnername'], 
+						$usermeta['cellphone'], 
+						$usermeta['busphone'], 
+						$phone,
+						$email, 
+						$user->ID
+				);
 			if (isset( $_GET['id'] ) ) {
 				array_push( $row, 'X');
 			}	

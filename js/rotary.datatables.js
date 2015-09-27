@@ -16,27 +16,48 @@ jQuery(document).ready(function($) {
 				],
 				'iDisplayLength': -1,
 				'aoColumnDefs': [{
-					'sClass': 'hide userid',
-					'aTargets': [7]
-				}, {
-					'sClass': 'username',
-					'aTargets': [1]
-				}, {
-					'sClass': 'email',
-					'aTargets': [6]
-				},{
-					'sClass': 'groupemail',
+					'sClass': 'selectorcol groupemail',
+					'bSortable' : false, 
 					'aTargets': [0]
+				}, {
+					'sClass': 'fullnamecol username',
+					'aTargets': [1]
+				},  {
+					'sClass': 'classificationcol',
+					'aTargets': [2]
+				}, {
+					'sClass': 'partnercol',
+					'aTargets': [3]
+				}, {
+					'sClass': 'homephonecol',
+					'bSortable' : false, 
+					'aTargets': [4]
+				}, {
+					'sClass': 'businessphonecol',
+					'bSortable' : false, 
+					'aTargets': [5]
+				}, {
+					'sClass': 'phonecol',
+					'bSortable' : false, 
+					'aTargets': [6]
+				}, {
+					'sClass': 'emailcol email',
+					'bSortable' : false, 
+					'aTargets': [7]
+				},{
+					'sClass': 'idcol hide userid',
+					'bSortable' : false, 
+					'aTargets': [8]
 				}],
 				'fnServerData': function(sSource, aoData, fnCallback) { /* Add some extra data to the sender */
-					//alert($('#commitees option:selected').val());
+					//alert($('#committees option:selected').val());
 					aoData.push({
 						'name': 'nameorder',
 						'value': $("input[name=nameorder]:checked").val()
 					});
 					aoData.push({
-						"name": "commitees",
-						"value": $("#commitees option:selected").val()
+						"name": "committees",
+						"value": $("#committees option:selected").val()
 					});
 					aoData.push({
 						"name": "rotarynonce",
@@ -56,32 +77,45 @@ jQuery(document).ready(function($) {
 					[20, 50, 100, 'All']
 				],
 				'iDisplayLength': -1,
-				'aoColumnDefs': [{
-					'sClass': 'hide userid',
-					'aTargets': [7]
-				}, {
-					'sClass': 'username',
-					'aTargets': [1]
-				}, {
-					'sClass': 'delete',
-					'bSortable' : false, 
-					'aTargets': [8]
-				},{
-					'sClass': 'email',
-					'aTargets': [6]
-				},{
-					'sClass': 'groupemail',
+				'aoColumnDefs': [ {
+					'sClass': 'selectorcol groupemail',
 					'bSortable' : false,
 					'aTargets': [0]
 				}, {
-					'sClass': 'hide',
+					'sClass': 'fullnamecol username',
+					'aTargets': [1]
+				}, {
+					'sClass': 'classificationcol hide',
 					'aTargets': [2]
 				}, {
-					'sClass': 'hide',
+					'sClass': 'partnercol hide',
 					'aTargets': [3]
+				}, {
+					'sClass': 'homephonecol',
+					'bSortable' : false, 
+					'aTargets': [4]
+				}, {
+					'sClass': 'businessphonecol',
+					'bSortable' : false, 
+					'aTargets': [5]
+				}, {
+					'sClass': 'phonecol',
+					'bSortable' : false, 
+					'aTargets': [6]
+				}, {
+					'sClass': 'emailcol email',
+					'bSortable' : false, 
+					'aTargets': [7]
+				},{
+					'sClass': 'idcol hide userid',
+					'aTargets': [8]
+				}, {
+					'sClass': 'deletecol delete',
+					'bSortable' : false, 
+					'aTargets': [9]
 				}],
 				'fnServerData': function(sSource, aoData, fnCallback) { /* Add some extra data to the sender */
-					//alert($('#commitees option:selected').val());
+					//alert($('#committees option:selected').val());
 					aoData.push({
 						'name': 'nameorder',
 						'value': $("input[name=nameorder]:checked").val()
@@ -103,7 +137,7 @@ jQuery(document).ready(function($) {
 			$(document).on('click', '#rotaryprojects td.delete', this.deleteMember);
 			$('#sendmailbutton').on('click', this.sendEmail);
 			$('.rotaryselections input[name=nameorder]').on('click', this.reloadMembers);
-			$('.rotaryselections #commitees').on('change', this.reloadMembers);
+			$('.rotaryselections #committees').on('change', this.reloadMembers);
 			$('.rotaryselections #newparticipants').on('change', this.addProjectMembers);
 		},
 		reloadMembers: function(e) {
