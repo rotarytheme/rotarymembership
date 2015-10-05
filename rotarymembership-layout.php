@@ -33,22 +33,42 @@
 				switch ( get_field( 'field_button_label', $id ) ) {
 					case 'Register':
 							$title = __( 'Registrations', 'Rotary' );
+							$button_label =  __( 'Register Now', 'Rotary' );
 						break;
 					case 'Signup':
 							$title = __( 'Signups', 'Rotary' );
+							$button_label =  __( 'Sign Up Now', 'Rotary' );
 						break;
 					case 'Volunteer':
 							$title = __( 'Volunteers', 'Rotary' );
+							$button_label =  __( 'Volunteer Now', 'Rotary' );
 						break;
 					case 'Support':
 							$title = __( 'Supporters', 'Rotary' );
+							$button_label =  __( 'Become a Supporter', 'Rotary' );
+						break;
+					case 'Donate':
+							$title = __( 'Donors', 'Rotary' );
+							$button_label =  __( 'Donate to this Project', 'Rotary' );
+						break;
+					case 'Advocate':
+							$title = __( 'Advocates', 'Rotary' );
+							$button_label =  __( 'Become an Advocate', 'Rotary' );
+						break;
+					case 'Purchase':
+							$title = __( 'Purchasers', 'Rotary' );
+							$button_label =  __( 'Buy Now', 'Rotary' );
 						break;
 					default: 
 						$title = __( 'Registrations', 'Rotary' );
+						$button_label =  __( 'Register Now', 'Rotary' );
 				}
 				$dataID = ' data-id="'.$id.'"';
 				$hideClass = $deleteCol = '';
-				$select = '<div class="usercontainer"><a class="rotarybutton-largeblue">'. get_field( 'field_button_label', $id ) . '</a></div>';
+				$select = '<div class="usercontainer">
+								<a id="showregistrationform" class="rotarybutton-largeblue">'. $button_label . '</a>
+								<a id="cancelregistrationform" class="rotarybutton-largewhite"  style="display:none;">'. __( 'Cancel' ) . '</a>
+							</div>';
 			endif;
 				
 		//Membership Directory
@@ -83,7 +103,7 @@
 					<div class="rotarymembershipheader">
 						<h2>' . $title . '</h2>
 						<div class="rotaryselections">' . $select . '</div>
-						<div id="gravityform">' . do_shortcode( '[gravityform id="' . $gf_form_id . '"]' ) . '</div>
+						<div id="gravityform" style="display: none;">' . do_shortcode( '[gravityform id="' . $gf_form_id . '" title="false" description="false"]' ) . '</div>
 						<table id="' . $divID . '" cellspacing="0" cellpadding="0" border="0" class="display"' . $dataID . '>
 							<thead>
 								<tr>';
