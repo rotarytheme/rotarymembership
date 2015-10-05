@@ -14,7 +14,43 @@
 					<select> <option value="email">' . _x( 'Email', 'Bulk action', 'rotary' ) . '</option></select> 
 					<input id="sendmailbutton" class="rotarybutton-smallwhite" type="button" value="' . _x( 'Go', 'Bulk actions', 'rotary' ) . '"/>
 				</div>';
-			
+		
+		// Gravity Form
+		elseif ( 'form' == $projects ) :
+			$gf_form_id = get_field( 'field_gravity_form_id', $id);
+			$gf_fields = array();
+			$i = 1;
+			while ( have_rows( 'field_column_display_repeater', $id )) : the_row();
+				$gf_fields[$i]['field_id'] = get_sub_field( 'form_field_column_selector' );
+				$gf_fields[$i]['header'] = get_sub_field( 'form_field_column_header' );
+				$gf_fields[$i]['width'] = get_sub_field( 'form_field_column_width' );
+				$i++;
+			endwhile;
+			$gf_form = GFAPI::get_form( $gf_form_id );
+			$divID = 'rotaryform';
+			if( $gf_form ) :
+				$divID = 'rotaryform';
+				switch ( get_field( 'field_button_label', $id ) ) {
+					case 'Register':
+							$title = __( 'Registrations', 'Rotary' );
+						break;
+					case 'Signup':
+							$title = __( 'Signups', 'Rotary' );
+						break;
+					case 'Volunteer':
+							$title = __( 'Volunteers', 'Rotary' );
+						break;
+					case 'Support':
+							$title = __( 'Supporters', 'Rotary' );
+						break;
+					default: 
+						$title = __( 'Registrations', 'Rotary' );
+				}
+				$dataID = ' data-id="'.$id.'"';
+				$hideClass = $deleteCol = '';
+				$select = '<div class="usercontainer"><a class="rotarybutton-largeblue">'. get_field( 'field_button_label', $id ) . '</a></div>';
+			endif;
+				
 		//Membership Directory
 		else: 
 			$divID = 'rotarymembers';
@@ -36,13 +72,40 @@
 				</div>';
 		endif;
 	
-
+		
+		/********Now produce the table ***/
+		
+		if( 'form' == $projects ) :
+		$memberTable = '
+				<div class="rotarymembershipcontainer">
+				<input type="hidden" id="form_id" value="' . $gf_form_id . '" />
+				<input type="hidden" id="post_id" value="' . $id . '" />
+					<div class="rotarymembershipheader">
+						<h2>' . $title . '</h2>
+						<div class="rotaryselections">' . $select . '</div>
+						<div id="gravityform">' . do_shortcode( '[gravityform id="' . $gf_form_id . '"]' ) . '</div>
+						<table id="' . $divID . '" cellspacing="0" cellpadding="0" border="0" class="display"' . $dataID . '>
+							<thead>
+								<tr>';
+				$i=1;
+			foreach ( $gf_fields as $gf_field ) {
+				$memberTable .= '<th class="formcolumnheader col' . $i . '" id ="col' . $i . '" width="' . trim( $gf_field['width'] ) . '%">' . $gf_field['header'] . '</th>';
+				$i++;
+			} 
+			$memberTable .= '
+							</thead>
+							<tbody></tbody>
+			        	</table>
+					</div><!-- end rotarymembershipheader -->
+       			</div><!-- end rotarymembershipcontainer -->
+			';
+		elseif ( 'form' != $projects) :
 		$memberTable = '
 				<div class="rotarymembershipcontainer">
 					<div class="rotarymembershipheader">
 						<h2>' . $title . '</h2>
 						<div class="rotaryselections">' . $select . '</div>
-						<table id="' . $divID . '" cellspacing="0" cellpadding="0" border="0" class="display"' . $dataID . '>	
+						<table id="' . $divID . '" style="width:97%;" cellspacing="0" cellpadding="0" border="0" class="display"' . $dataID . ' >	
 							<thead>
 								<tr>	
 									<th class="selectorcol"></th>
@@ -125,6 +188,7 @@
 					</div><!-- end rotarymembershipheader -->
        			</div><!-- end rotarymembershipcontainer -->
 			';
+		endif;
 		return $memberTable;
 	}
 ?>

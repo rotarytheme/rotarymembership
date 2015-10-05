@@ -46,6 +46,8 @@ class RotaryMembership {
 		//ajax to get members
 		add_action( 'wp_ajax_nopriv_rotarymembers', array($this, 'rotary_get_members' ));
 		add_action( 'wp_ajax_rotarymembers', array($this, 'rotary_get_members' ));
+		add_action( 'wp_ajax_nopriv_rotaryform', array($this, 'rotary_get_form_entries' ));
+		add_action( 'wp_ajax_rotaryform', array($this, 'rotary_get_form_entries' ));
 		add_action( 'wp_ajax_nopriv_projectmembers', array($this, 'rotary_add_project_members' ));
 		add_action( 'wp_ajax_projectmembers', array($this, 'rotary_add_project_members' ));
 		add_action( 'wp_ajax_nopriv_deleteprojectmember', array($this, 'rotary_delete_project_member' ));
@@ -376,10 +378,10 @@ class RotaryMembership {
 	*************************************************/
 	function get_rotary_club_members( $atts ) { 
 		extract( shortcode_atts( array(
-			'type' => '',
+			'type' => '', 
 			'id' => ''
 		), $atts ) );
-	 	
+		
 	 	if (!is_user_logged_in() ) :
 	 		$not_loggedin_msg = (( 'rotary_projects' == get_post_type() )) 
 	 										? _e ( 'You must be logged in to see project participants', 'Rotary' ) 
@@ -412,9 +414,16 @@ class RotaryMembership {
 		wp_enqueue_script(array('datatables','datatablesreload', 'rotarydatatables', 'jquery-ui-dialog'));
 		wp_localize_script( 'rotarydatatables', 'rotarydatatables', array('ajaxURL' => admin_url('admin-ajax.php'),'tableNonce' => wp_create_nonce( 'rotary-table-nonce' )) );
 	 }
+	 
+	 
+	 // Get the list of form entries
+	 function rotary_get_form_entries() {
+		 die(json_encode($this->rotaryProfiles->get_form_entries_json( $_GET['form_id'], $_GET['post_id'] )));
+	 }
+	 
 	 //get the list of members
 	 function rotary_get_members() {
-		 die(json_encode($this->rotaryProfiles->get_users_json($_GET['nameorder'])));
+		 die(json_encode($this->rotaryProfiles->get_users_json( $_GET['nameorder'] )));
 		
 	 }
 	 //get the member details

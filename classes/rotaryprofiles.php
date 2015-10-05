@@ -281,6 +281,136 @@ class RotaryProfiles {
 			}
 		
 	}
+	
+	
+	// ajax function to return data in form for the participation table (projects)
+	function get_form_entries_json( $gf_form_id, $post_id ) {
+
+		$gf_fields = array();
+		$gf_headers = array();
+		$gf_field_ids = array();
+		$i = 0;
+		while ( have_rows( 'field_column_display_repeater', $post_id )) : the_row();
+			$gf_headers[$i] = get_sub_field( 'form_field_column_header' );
+			$gf_field_ids[$i] = get_sub_field( 'form_field_column_selector' );
+			$i++;
+		endwhile;
+		
+		$search_criteria = array();
+		$sorting         = array( 'key' => $gf_fields[1], 'direction' => 'ASC' );
+		$gf_entries      = GFAPI::get_entries( $gf_form_id, $search_criteria, $sorting );
+		$output = array(
+				'sColumns' => implode ( ',', $gf_headers ),
+				'sEcho' => isset( $_GET['sEcho'] ) ? intval($_GET['sEcho']) : null,
+				'iTotalRecords' => isset( $gf_form_id ) ? GFAPI::count_entries( $gf_form_id ): 0,
+				'iTotalDisplayRecords' => 10,
+				'aaData' => array()
+		);
+	
+		foreach ( $gf_entries as $gf_entry ) {
+			$columnvalue = $this->get_columnvalues( $gf_entry, $gf_field_ids );
+			$row = array();
+			for ( $i = 0; $i < count( $gf_field_ids ); $i++ ) {
+				$row[$i] = $columnvalue[$i];
+			};
+			$output['aaData'][] = $row;
+		}
+		return $output;
+	}
+	
+	
+	function get_columnvalues( $gf_entry, $gf_field_ids  ) {
+		
+	$entry_id = $gf_entry["id"];
+	$gf_form_id = $gf_entry['form_id'];
+	$gf_form = GFAPI::get_form( $gf_form_id );
+	// Loop trough all the fields
+	foreach( $gf_form["fields"] as $field ) {
+		// If the field is one we want to display (array search should return the order (array key)
+		$columnnumber = array_search( $field['id'], $gf_field_ids );
+		if ( false !== $columnnumber ) :
+			// ...we get the value for it
+			$field_value = RGFormsModel::get_lead_field_value( $gf_entry, $field );
+			
+			// If nowrap is set for this field we add a class to it
+			// If the field is a product field
+			if ($field["type"] == "product" || $field["type"] == "shipping" || $field["type"] == "option") {
+				// ...and the value is an array
+				if( is_array($field_value) ) {
+					// If this product field is an option field
+					if( $field["type"] == "option" ) {
+						// Remove the price from the string
+						foreach ($field_value as &$option) {
+							$option = substr($option, 0, strpos($option, "|"));
+						}
+						// Remove empty values and implode the array
+						$field_value = array_filter( $field_value );
+						$field_value = implode(", ", $field_value);
+					}else{
+						// Get the total number of products (last item in array)
+						$field_value = end($field_value);
+					}
+				}else{
+					// Remove the price from the string
+					$field_value = substr($field_value, 0, strpos($field_value, "|"));
+				}
+			}
+			elseif( $field["type"] == "name" ) {
+				// Sort the array by key so that the fields are shown in the correct order
+				// Concatenate field values into string separated by a space
+                ksort( $field_value );
+                $field_values = "";
+                 // Concatenate field values into string separated by a space
+                foreach ($field_value as $field => $value) {
+                      $field_values .= $value . " ";
+                }
+                $field_value = trim( $field_values );
+			}
+			// If the value is an array (i.e. address field, name field, etc)
+			elseif( is_array($field_value) ) {
+				// Sort the array by key so that the fields are shown in the correct order
+				// Concatenate field values into string separated by a space
+                ksort( $field_value );
+                $field_values = "";
+                 // Concatenate field values into string separated by a space
+                foreach ($field_value as $field => $value) {
+                      $field_values .= ( $value) ? $value . ", " : '';
+                }
+                $field_value =  substr(trim($field_values), 0, strlen(trim($field_values))-1);
+			}
+			// If the field is a date field we need to format it
+			elseif ($field["type"] == "date" && $field_value != "") {
+				$field_value = date( 'm/d/Y', strtotime($field_value )); 
+			}
+	
+			// If the field is an URL we need to format it
+			elseif ($field["type"] == "website" && $field_value != "") {
+				$field_value = "<a href='$field_value'>$field_value</a></td>";
+			}
+	
+			// If the field is a post category we need to remove the ID from the string
+			elseif ($field["type"] == "post_category" && $field_value != "") {
+				$tdClass = "stickylist-category";
+				$field_value = strtok($field_value, ":");
+			}
+	
+			// If the field is a list field we need to unserialize it, flatten the array and implode it into a string
+			elseif ($field["type"] == "list" && $field_value != "") {
+				if( is_array(maybe_unserialize($field_value ))) {
+					$list = maybe_unserialize($field_value);
+					$field_value = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator( $list )), FALSE);
+					$field_value = implode(", ", $field_value);
+				}
+			}
+			$columnvalue[ $columnnumber ] = $field_value;
+		endif;
+		}
+	return $columnvalue;
+}
+	
+	
+
+	
 	function get_users_json( $nameorder ) {
 		$output = array(
         	'sColumns' => 'Name, Classification, Cell/Home Phone, Business Phone, Phone, Email',

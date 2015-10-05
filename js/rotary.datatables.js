@@ -68,9 +68,33 @@ jQuery(document).ready(function($) {
 					});
 				}
 			});
+			formTable = $('#rotaryform').dataTable({
+				'bProcessing': true,
+				'bAutoWidth':false,
+				'bServerSide': false,
+				'sAjaxSource': rotarydatatables.ajaxURL + '?action=rotaryform',
+				'aLengthMenu': [
+					[5, 10, 25, -1],
+					[5, 10, 25, 'All']
+				],
+				'fnServerData': function(sSource, aoData, fnCallback) { /* Add some extra data to the sender */
+					//alert($('#committees option:selected').val());
+					aoData.push({
+						'name': 'form_id',
+						'value': $("#form_id").val()
+					});
+					aoData.push({
+						'name': 'post_id',
+						'value': $("#post_id").val()
+					});
+					$.getJSON(sSource, aoData, function(json) { /* Do whatever additional processing you want on the callback, then tell DataTables */
+						fnCallback(json);
+					});
+				}
+			});
 			projectsTable = $('#rotaryprojects').dataTable({
 				'bProcessing': true,
-				'bServerSide': false,
+				'bServerSide': true,
 				'sAjaxSource': rotarydatatables.ajaxURL + '?action=rotarymembers',
 				'aLengthMenu': [
 					[20, 50, 100, -1],
