@@ -40,11 +40,14 @@ class RotaryMembership {
 		add_action('init', array($this, 'register_project_post_type'));
 		add_action( 'p2p_init', array($this, 'rotary_connection_types' ));
 		add_shortcode( 'MEMBER_DIRECTORY', array($this, 'get_rotary_club_members') );
+		add_shortcode( 'DIRECTORY', array($this, 'get_rotary_club_members') );
 		add_action('init', array($this, 'register_script_for_shortcodes') );
 		add_action('template_redirect', array($this, 'enqueue_scripts_for_shortcodes') );
 		//ajax to get members
 		add_action( 'wp_ajax_nopriv_rotarymembers', array($this, 'rotary_get_members' ));
 		add_action( 'wp_ajax_rotarymembers', array($this, 'rotary_get_members' ));
+		add_action( 'wp_ajax_nopriv_rotaryform', array($this, 'rotary_get_form_entries' ));
+		add_action( 'wp_ajax_rotaryform', array($this, 'rotary_get_form_entries' ));
 		add_action( 'wp_ajax_nopriv_projectmembers', array($this, 'rotary_add_project_members' ));
 		add_action( 'wp_ajax_projectmembers', array($this, 'rotary_add_project_members' ));
 		add_action( 'wp_ajax_nopriv_deleteprojectmember', array($this, 'rotary_delete_project_member' ));
@@ -232,32 +235,31 @@ class RotaryMembership {
 	register_post_type( 'rotary_projects', /* (http://codex.wordpress.org/Function_Reference/register_post_type) */
 	 	// let's now add all the options for this post type
 		array('labels' => array(
-			'name' => __('Projects', 'rotary'), /* This is the Title of the Group */
-			'singular_name' => __('Project', 'rotary'), /* This is the individual type */
-			'all_items' => __('All Projects', 'rotary'), /* the all items menu item */
-			'add_new' => __('Add New', 'rotary'), /* The add new menu item */
-			'add_new_item' => __('Add New Project', 'rotary'), /* Add New Display Title */
-			'edit' => __( 'Edit', 'rotary' ), /* Edit Dialog */
-			'edit_item' => __('Edit Project', 'rotary'), /* Edit Display Title */
-			'new_item' => __('New Project', 'rotary'), /* New Display Title */
-			'view_item' => __('View Project', 'rotary'), /* View Display Title */
-			'search_items' => __('Search Projects', 'rotary'), /* Search Custom Type Title */ 
-			'not_found' =>  __('Nothing found.', 'rotary'), /* This displays if there are no entries yet */ 
-			'not_found_in_trash' => __('Nothing found in Trash', 'rotary'), /* This displays if there is nothing in the trash */
-			'parent_item_colon' => ''
-			), /* end of arrays */
-			'description' => __( 'This is where the ', 'rotary' ), /* Custom Type Description */
-			'public' => true,
+							'name' 				=> __('Projects', 'rotary'), /* This is the Title of the Group */
+							'singular_name' 	=> __('Project', 'rotary'), /* This is the individual type */
+							'all_items' 		=> __('All Projects', 'rotary'), /* the all items menu item */
+							'add_new' 			=> __('Add New', 'rotary'), /* The add new menu item */
+							'add_new_item' 		=> __('Add New Project', 'rotary'), /* Add New Display Title */
+							'edit' 				=> __( 'Edit', 'rotary' ), /* Edit Dialog */
+							'edit_item' 		=> __('Edit Project', 'rotary'), /* Edit Display Title */
+							'new_item' 			=> __('New Project', 'rotary'), /* New Display Title */
+							'view_item' 		=> __('View Project', 'rotary'), /* View Display Title */
+							'search_items' 		=> __('Search Projects', 'rotary'), /* Search Custom Type Title */ 
+							'not_found' 		=> __('Nothing found.', 'rotary'), /* This displays if there are no entries yet */ 
+							'not_found_in_trash'=> __('Nothing found in Trash', 'rotary'), /* This displays if there is nothing in the trash */
+							'parent_item_colon' => ''
+						), /* end of arrays */
+			'description' 		=> __( 'This is where the ', 'rotary' ), /* Custom Type Description */
+			'public' 			=> true,
 			'publicly_queryable' => true,
-			'exclude_from_search' => false,
-			'show_ui' => true,
-			'query_var' => true,
-			'menu_position' => 9, /* this is what order you want it to appear in on the left hand side menu */ 
-			'rewrite'	=> array( 'slug' => 'project', 'with_front' => false ), /* you can specify its url slug */
-
-			'capability_type' => 'post',
-			'has_archive' => 'project_archive', /* you can rename the slug here */
-			'hierarchical' => false,
+			'exclude_from_search'=> false,
+			'show_ui' 			=> true,
+			'query_var' 		=> true,
+			'menu_position' 	=> 9, /* this is what order you want it to appear in on the left hand side menu */ 
+			'rewrite'			=> array( 'slug' => 'project', 'with_front' => false ), /* you can specify its url slug */
+			'capability_type' 	=> 'post',
+			'has_archive' 		=> 'project_archive', /* you can rename the slug here */
+			'hierarchical' 		=> false,
 			/* the next one is important, it tells what's enabled in the post editor */
 			'supports' => array( 'title', 'editor', 'author', 'custom-fields', 'revisions', 'thumbnail', 'comments')
 	 	) /* end of options */
@@ -265,19 +267,20 @@ class RotaryMembership {
 	// now let's add custom categories (these act like categories)
     register_taxonomy( 'rotary_project_cat', 
     	array('rotary_projects'), /* if you change the name of register_post_type( 'custom_type', then you have to change this */
-    	array('hierarchical' => true,     /* if this is true, it acts like categories */             
+    	array(
+    		'hierarchical' => true,     /* if this is true, it acts like categories */             
     		'labels' => array(
-    			'name' => __( 'Project Categories', 'rotary' ), /* name of the custom taxonomy */
-    			'singular_name' => __( 'Project Category', 'rotary' ), /* single taxonomy name */
-    			'search_items' =>  __( 'Search Project Categories', 'rotary' ), /* search title for taxomony */
-    			'all_items' => __( 'All Project Categories', 'rotary' ), /* all title for taxonomies */
-    			'parent_item' => __( 'Parent Project Category', 'rotary' ), /* parent title for taxonomy */
-    			'parent_item_colon' => __( 'Parent Project Category:', 'rotary' ), /* parent taxonomy title */
-    			'edit_item' => __( 'Edit Project Category', 'rotary' ), /* edit custom taxonomy title */
-    			'update_item' => __( 'Update Project Category', 'rotary' ), /* update title for taxonomy */
-    			'add_new_item' => __( 'Add New Project Category', 'rotary' ), /* add new title for taxonomy */
-    			'new_item_name' => __( 'New Project', 'rotary' ) /* name title for taxonomy */
-    		),
+			    			'name' 				=> __( 'Project Categories', 'rotary' ), /* name of the custom taxonomy */
+			    			'singular_name' 	=> __( 'Project Category', 'rotary' ), /* single taxonomy name */
+			    			'search_items' 		=> __( 'Search Project Categories', 'rotary' ), /* search title for taxomony */
+			    			'all_items' 		=> __( 'All Project Categories', 'rotary' ), /* all title for taxonomies */
+			    			'parent_item' 		=> __( 'Parent Project Category', 'rotary' ), /* parent title for taxonomy */
+			    			'parent_item_colon' => __( 'Parent Project Category:', 'rotary' ), /* parent taxonomy title */
+			    			'edit_item' 		=> __( 'Edit Project Category', 'rotary' ), /* edit custom taxonomy title */
+			    			'update_item' 		=> __( 'Update Project Category', 'rotary' ), /* update title for taxonomy */
+			    			'add_new_item' 		=> __( 'Add New Project Category', 'rotary' ), /* add new title for taxonomy */
+			    			'new_item_name' 	=> __( 'New Project', 'rotary' ) /* name title for taxonomy */
+			    		),
     		'show_ui' => true,
     		'query_var' => true,
     		'rewrite' => array( 'slug' => 'project-category' ),
@@ -288,17 +291,17 @@ class RotaryMembership {
     	array('rotary_projects'), /* if you change the name of register_post_type( 'custom_type', then you have to change this */
     	array('hierarchical' => false,    /* if this is false, it acts like tags */                
     		'labels' => array(
-    			'name' => __( 'Project Tags', 'rotary' ), /* name of the custom taxonomy */
-    			'singular_name' => __( 'Project Tag', 'rotary' ), /* single taxonomy name */
-    			'search_items' =>  __( 'Search Project Tags', 'rotary' ), /* search title for taxomony */
-    			'all_items' => __( 'All Projects Tags', 'rotary' ), /* all title for taxonomies */
-    			'parent_item' => __( 'Parent Project Tag', 'rotary' ), /* parent title for taxonomy */
-    			'parent_item_colon' => __( 'Parent Project Tag:', 'rotary' ), /* parent taxonomy title */
-    			'edit_item' => __( 'Edit Project Tag', 'rotary' ), /* edit custom taxonomy title */
-    			'update_item' => __( 'Update Project Tag', 'rotary' ), /* update title for taxonomy */
-    			'add_new_item' => __( 'Add New Project Tag', 'rotary' ), /* add new title for taxonomy */
-    			'new_item_name' => __( 'New Project Tag Name', 'rotary' ) /* name title for taxonomy */
-    		),
+			    			'name' 				=> __( 'Project Tags', 'rotary' ), /* name of the custom taxonomy */
+			    			'singular_name' 	=> __( 'Project Tag', 'rotary' ), /* single taxonomy name */
+			    			'search_items' 		=> __( 'Search Project Tags', 'rotary' ), /* search title for taxomony */
+			    			'all_items' 		=> __( 'All Projects Tags', 'rotary' ), /* all title for taxonomies */
+			    			'parent_item' 		=> __( 'Parent Project Tag', 'rotary' ), /* parent title for taxonomy */
+			    			'parent_item_colon' => __( 'Parent Project Tag:', 'rotary' ), /* parent taxonomy title */
+			    			'edit_item' 		=> __( 'Edit Project Tag', 'rotary' ), /* edit custom taxonomy title */
+			    			'update_item' 		=> __( 'Update Project Tag', 'rotary' ), /* update title for taxonomy */
+			    			'add_new_item' 		=> __( 'Add New Project Tag', 'rotary' ), /* add new title for taxonomy */
+			    			'new_item_name' 	=> __( 'New Project Tag Name', 'rotary' ) /* name title for taxonomy */
+			    		),
     		'show_ui' => true,
     		'query_var' => true,
     	)
@@ -309,12 +312,12 @@ class RotaryMembership {
 	//register the custom post type for committees
 	function register_commitee_post_type() {
 		$labels = array(
-			'add_new_item' => 'Add Committee',
-			'edit_item' => 'Edit Committee',
-			'new_item' => 'New Committees',
-			'view_item' => 'View Committee',
-			'search_items' => 'Search Committees',
-			'not_found' => 'No Committees Found'
+			'add_new_item' 	=> __( 'Add Committee', 'rotary' ),
+			'edit_item' 	=> __( 'Edit Committee', 'rotary' ),
+			'new_item' 		=> __( 'New Committees', 'rotary' ),
+			'view_item' 	=> __( 'View Committee', 'rotary' ),
+			'search_items' 	=> __( 'Search Committees', 'rotary' ),
+			'not_found' 	=> __( 'No Committees Found', 'rotary' )
 		);   
   
         $args = array(  
@@ -368,25 +371,31 @@ class RotaryMembership {
 			'to' => 'rotary-committees'
 		) );
 	}
-	//shortcodes to display rotary club members
-	function get_rotary_club_members($atts) { 
-	 	$not_loggedin_msg = " Rotary members";
-		if  ('rotary_projects' == get_post_type() ) :
-			$not_loggedin_msg = " project participants";
-		endif;
-	 	if (!is_user_logged_in() ) {
-			$memberTable = '<div class="rotarymembernotloggedin"><p>You must be logged in to see' . $not_loggedin_msg. '</p>
-			<p>'.wp_loginout( get_permalink(), false ).'</p>';
+	
+	
+	/*************************************************
+	  shortcodes to display rotary club members
+	*************************************************/
+	function get_rotary_club_members( $atts ) { 
+		extract( shortcode_atts( array(
+			'type' => '', 
+			'id' => ''
+		), $atts ) );
+		
+	 	if (!is_user_logged_in() ) :
+	 		$not_loggedin_msg = (( 'rotary_projects' == get_post_type() )) 
+	 										? _e ( 'You must be logged in to see project participants', 'Rotary' ) 
+	 										: _e ( 'You must be logged in to see member information', 'Rotary' );
+			$memberTable = '
+					<div class="rotarymembernotloggedin">
+						<p>' . $not_loggedin_msg. '</p>
+						<p>' . wp_loginout( get_permalink(), false ) . '</p>
+					</div>';
 			
-	 	}
-		else { 
-			include('rotarymembership-layout.php');
-			extract( shortcode_atts( array(
-				'type' => '',
-				'id' => ''
-			), $atts ) );
-			$memberTable = get_memberhsip_layout($this, $type, $id);
-		}
+		else:
+			include( 'rotarymembership-layout.php' );
+			$memberTable = get_membership_layout( $this, $type, $id );
+		endif;
 		return $memberTable;
 	}
 	
@@ -405,9 +414,16 @@ class RotaryMembership {
 		wp_enqueue_script(array('datatables','datatablesreload', 'rotarydatatables', 'jquery-ui-dialog'));
 		wp_localize_script( 'rotarydatatables', 'rotarydatatables', array('ajaxURL' => admin_url('admin-ajax.php'),'tableNonce' => wp_create_nonce( 'rotary-table-nonce' )) );
 	 }
+	 
+	 
+	 // Get the list of form entries
+	 function rotary_get_form_entries() {
+		 die(json_encode($this->rotaryProfiles->get_form_entries_json( $_GET['form_id'], $_GET['post_id'] )));
+	 }
+	 
 	 //get the list of members
 	 function rotary_get_members() {
-		 die(json_encode($this->rotaryProfiles->get_users_json($_GET['nameorder'])));
+		 die(json_encode($this->rotaryProfiles->get_users_json( $_GET['nameorder'] )));
 		
 	 }
 	 //get the member details
@@ -469,7 +485,9 @@ class RotaryMembership {
 			'post_type' 	 => 'rotary-committees'
 		);
 		$query = new WP_Query( $args );
-		$options = '<option value="all">All</option>';
+		$options = '
+				<option value="all">' . _x( 'Filter by committee', 'Member directory dropdown for committees', 'rotary' ) . '</option>
+				<option value="all">' . _x( 'All', 'Member directory dropdown for committees', 'rotary' ) . '</option>';
 		while ( $query->have_posts() ) : $query->the_post();
 		  $options .= '<option value="'.get_the_ID().'">'.get_the_title().'</option>';
 		endwhile;
@@ -483,7 +501,7 @@ class RotaryMembership {
 			 'meta_key' => 'last_name'
 		);
 		$users = get_users($args);
-		$options = '<option value="">Select a club member to add them as a participant</option>';
+		$options = '<option value="">' . _x( 'Add a participant', 'Project participant dropdown', 'rotary' ) . '...</option>';
 		foreach ($users as $user) {
 		    
 			$usermeta = get_user_meta($user->ID);
@@ -497,7 +515,11 @@ class RotaryMembership {
 		
 		return $options;
 	 }
-	 /**
+	 
+	 
+	 
+	 
+ /**
  * Register the required plugins for this theme.
  *
  * The variable passed to tgmpa_register_plugins() should be an array of plugin

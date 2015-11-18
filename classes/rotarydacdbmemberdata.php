@@ -500,7 +500,7 @@ class RotaryDacdbMemberData extends RotaryMemberData{
   		$header = new SoapHeader('http://xWeb', 'Token', $token, false );
   		$client->__setSoapHeaders(array($header)); 
   		$coChairCount = 0;
-  		$chairArray = array('CHAIR', 'MEMBERSHIP CHAIR');
+  		$chairArray = array('CHAIR', 'MEMBERSHIP CHAIR', 'COMMITTEE CHAIR');
   		$cochairArray = array('COCHAIR', 'CO-CHAIR');
 		try {	
 			$rotaryclubmembers = $client->CommitteeMembersByID(floatval($committeeNumber), 'UserName');
