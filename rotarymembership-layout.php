@@ -1,5 +1,7 @@
 <?php
 	function get_membership_layout( $rotarymembership, $projects, $id ) {
+		 
+		global  $RegistrationNoun, $RegistrationCTA;
 		
 		//Participation Table - must be explicitly a project table, and have an id or will default ot a membership table
 		if ( 'projects' == $projects && strlen( $id ) > 1 ) : 
@@ -30,39 +32,11 @@
 			$divID = 'rotaryform';
 			if( $gf_form ) :
 				$divID = 'rotaryform';
-				switch ( get_field( 'field_button_label', $id ) ) {
-					case 'Register':
-							$title = __( 'Registrations', 'Rotary' );
-							$button_label =  __( 'Register Now', 'Rotary' );
-						break;
-					case 'Signup':
-							$title = __( 'Signups', 'Rotary' );
-							$button_label =  __( 'Sign Up Now', 'Rotary' );
-						break;
-					case 'Volunteer':
-							$title = __( 'Volunteers', 'Rotary' );
-							$button_label =  __( 'Volunteer Now', 'Rotary' );
-						break;
-					case 'Support':
-							$title = __( 'Supporters', 'Rotary' );
-							$button_label =  __( 'Become a Supporter', 'Rotary' );
-						break;
-					case 'Donate':
-							$title = __( 'Donors', 'Rotary' );
-							$button_label =  __( 'Donate to this Project', 'Rotary' );
-						break;
-					case 'Advocate':
-							$title = __( 'Advocates', 'Rotary' );
-							$button_label =  __( 'Become an Advocate', 'Rotary' );
-						break;
-					case 'Purchase':
-							$title = __( 'Purchasers', 'Rotary' );
-							$button_label =  __( 'Buy Now', 'Rotary' );
-						break;
-					default: 
-						$title = __( 'Registrations', 'Rotary' );
-						$button_label =  __( 'Register Now', 'Rotary' );
-				}
+			
+				$action = get_field( 'field_button_label', $id );
+				$title = $RegistrationNoun[$action];
+				$button_label =  $RegistrationCTA[$action];
+				
 				$dataID = ' data-id="'.$id.'"';
 				$hideClass = $deleteCol = '';
 				$select = '<div class="usercontainer">
