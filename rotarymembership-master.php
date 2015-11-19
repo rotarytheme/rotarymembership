@@ -19,7 +19,6 @@ require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotaryprofiles.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarymemberdata.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarydacdbmemberdata.php');
 require_once(ROTARY_MEMBERSHIP_PLUGIN_PATH . '/classes/rotarysoapauth.php');
-require_once('class-tgm-plugin-activation.php'); 
 include_once('rotarypluginupdater.php');
 class RotaryMembership {
 	private $rotaryProfiles;
