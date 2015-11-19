@@ -54,8 +54,6 @@ class RotaryMembership {
 		add_action( 'wp_ajax_deleteprojectmember', array($this, 'rotary_delete_project_member' ));
 		add_action( 'wp_ajax_nopriv_rotarymemberdetails', array($this, 'rotary_get_member_details' ));
 		add_action( 'wp_ajax_rotarymemberdetails', array($this, 'rotary_get_member_details' ));	
-		/*the next code is to register plugins for inclusion with the theme*/
-		add_action( 'tgmpa_register', array($this, 'rotary_register_required_plugins' ));
 		$this->setup_plugin_updates();
 	}
 	//activation creates a table to store rotary members user id from DacDb. 
@@ -160,7 +158,7 @@ class RotaryMembership {
 				echo $dacdbClub;
 				break;
 			case 'rotary_dacdb_club_name':
-			   $dacdbClubName = '<input type="number" class="nodacdb" name="rotary_dacdb[rotary_dacdb_club_name]" id="rotary_dacdb_club_name" value="'.esc_attr( $options['rotary_dacdb_club_name'] ) .'" class="regular-text"/>';
+			   $dacdbClubName = '<input type="text" class="nodacdb" name="rotary_dacdb[rotary_dacdb_club_name]" id="rotary_dacdb_club_name" value="'.esc_attr( $options['rotary_dacdb_club_name'] ) .'" class="regular-text"/>';
 				echo $dacdbClubName;
 			   	break;
 			case 'rotary_instructions':
@@ -518,56 +516,6 @@ class RotaryMembership {
 	 
 	 
 	 
-	 
- /**
- * Register the required plugins for this theme.
- *
- * The variable passed to tgmpa_register_plugins() should be an array of plugin
- * arrays.
- *
- * This function is hooked into tgmpa_init, which is fired within the
- * TGM_Plugin_Activation class constructor.
- */
-function rotary_register_required_plugins() {
-
-	/**
-	 * Array of plugin arrays. Required keys are name and slug.
-	 * If the source is NOT from the .org repo, then source is also required.
-	 */
-	$plugins = array(
-
-
-
-		// This is an example of how to include a plugin from the WordPress Plugin Repository
-		array(
-			'name' 		=> 'Posts 2 Posts',
-			'slug' 		=> 'posts-to-posts',
-			'required' 	=> true,
-			'force_activation' => true
-		),
-
-	);
-
-	// Change this to your theme text domain, used for internationalising strings
-	$theme_text_domain = 'rotary';
-
-	/**
-	 * Array of configuration settings. Amend each line as needed.
-	 * If you want the default strings to be available under your own theme domain,
-	 * leave the strings uncommented.
-	 * Some of the strings are added into a sprintf, so see the comments at the
-	 * end of each line for what each argument will be.
-	 */
-	$config = array(
-		'parent_menu_slug'  => 'plugins.php',         // Default parent menu slug
-        'parent_url_slug'   => 'plugins.php',
-		'strings'      		=> array(
-		),
-	);
-
-	tgmpa( $plugins, $config );
-
-}
 }//end class
 $rotaryMembership = new RotaryMembership();
 ?>
