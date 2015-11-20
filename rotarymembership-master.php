@@ -2,11 +2,12 @@
 /*
 Plugin Name: Rotary Membership
 Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.179
+Version: 2.180
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
 */
+
 // Set path to theme specific functions
 define( 'ACF_LITE' , true );
 define( 'ROTARY_MEMBERSHIP_PLUGIN_PATH', dirname( __FILE__ ) );
