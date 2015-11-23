@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Rotary Membership
-Description: This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
-Version: 2.181
+Description: You MUST update to this version, and then deactivate it before upgrading your Theme.  This is a plugin for Rotary Clubs to Maintain Membership from DacDB. This plugin auto updates from github.
+Version: 2.182
 Author: Merrill M. Mayer
 Author URI: http://www.koolkatwebdesigns.com/
 License: GPL2
