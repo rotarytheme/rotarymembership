@@ -3,6 +3,7 @@
 this unintalls the options and extra user data
 */
 	if(defined('WP_UNINSTALL_PLUGIN') ){  
+		/*
 		global $wpdb;
         $table_name = $wpdb->prefix . 'rotarymembers';
 
@@ -47,6 +48,6 @@ this unintalls the options and extra user data
 			$connect_table_name = $wpdb->prefix . 'p2p';
 			$wpdb->query('TRUNCATE TABLE '.$connect_table_name);
 			$wpdb->query($query);
-        
+        */
     }  
 ?>
